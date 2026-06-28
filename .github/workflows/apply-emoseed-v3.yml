@@ -1,0 +1,498 @@
+name: Apply EmoSeed v3 service expansion
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-emoseed-v3.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install image tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk
+          python -m pip install --upgrade pillow
+
+      - name: Build EmoSeed v3
+        shell: bash
+        run: |
+          cat > /tmp/apply_emoseed_v3.py <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageDraw, ImageFont
+          import json, re, html
+
+          ROOT = Path('.')
+          BASE = 'https://emoseed.lavalabs.co.kr'
+          plants = [
+            ('INFP','무궁화','조용하지만 쉽게 꺾이지 않는 마음','당신의 속도는 느린 것이 아니라, 깊게 뿌리내리는 중이에요.',['깊은 감정','상상력','진심']),
+            ('INFJ','라벤더','곁에 있는 사람의 마음을 조용히 돌보는 사람','누군가를 비추는 빛도 가끔은 스스로를 향해야 해요.',['통찰','배려','치유']),
+            ('INTP','민트','새로운 관점으로 세상을 해석하는 탐구자','완벽한 답보다 살아 있는 질문이 당신을 더 멀리 데려가요.',['호기심','분석','독창성']),
+            ('INTJ','스투키','긴 호흡으로 목표를 설계하는 단단한 전략가','단단함은 쉬지 않는 것이 아니라, 다시 설 힘을 남겨두는 일이에요.',['계획','독립성','집중']),
+            ('ISFP','수국','감정을 색과 분위기로 기억하는 섬세한 예술가','당신의 섬세함은 약함이 아니라 세상을 더 많이 느끼는 힘이에요.',['감각','자유','다정함']),
+            ('ISTP','선인장','필요한 순간 정확하게 움직이는 독립적인 해결사','혼자 잘해내는 사람에게도 기대어 쉴 자리는 필요해요.',['실용성','침착함','자율']),
+            ('ISFJ','알로에','작은 불편까지 먼저 알아채는 다정한 보호자','다정함은 나를 소진할 때보다 나까지 포함할 때 오래가요.',['성실함','세심함','책임감']),
+            ('ISTJ','대나무','약속과 기준을 지키며 신뢰를 쌓는 사람','꾸준함에도 숨을 고르는 마디가 있어야 더 높이 자랄 수 있어요.',['책임감','정확함','꾸준함']),
+            ('ENFP','해바라기','가능성을 발견하면 먼저 빛을 향해 움직이는 사람','모든 빛을 따라갈 필요는 없어요. 지금 가장 따뜻한 방향이면 충분해요.',['열정','공감','가능성']),
+            ('ENFJ','장미','사람의 가능성을 믿고 함께 피어나게 하는 리더','사랑받기 위해 계속 피어 있을 필요는 없어요. 가시가 있는 날도 당신이에요.',['영향력','공감','표현력']),
+            ('ENTP','페퍼민트','익숙한 규칙을 유쾌하게 뒤집는 아이디어 메이커','당신의 번뜩임은 완성이라는 작은 화분에 담길 때 더 오래 살아남아요.',['재치','도전','발상']),
+            ('ENTJ','튤립','목표를 선명하게 세우고 길을 만들어가는 사람','더 멀리 가는 힘은 밀어붙임뿐 아니라 방향을 다시 보는 여유에서도 나와요.',['추진력','결단','성장']),
+            ('ESFP','코스모스','지금 이 순간의 즐거움을 주변과 나누는 사람','누군가가 보지 않아도 아름다운 순간은 여전히 당신의 것이에요.',['활력','친화력','감각']),
+            ('ESTP','장미허브','상황을 빠르게 읽고 바로 움직이는 에너지형 실천가','빠르게 가는 당신에게도 풍경을 기억할 만큼의 속도는 필요해요.',['행동력','순발력','현실감']),
+            ('ESFJ','카네이션','관계의 온도를 살피며 편안한 자리를 만드는 사람','당신의 가치는 누군가의 고마움보다 먼저 존재해요.',['친절','조화','헌신']),
+            ('ESTJ','유칼립투스','현실적인 기준으로 질서와 성과를 만드는 사람','정돈된 하루는 빈틈이 없는 하루가 아니라, 숨 쉴 공간이 있는 하루예요.',['관리력','명확함','실행력']),
+          ]
+
+          def read(path):
+              return (ROOT / path).read_text(encoding='utf-8')
+
+          def write(path, text):
+              target = ROOT / path
+              target.parent.mkdir(parents=True, exist_ok=True)
+              target.write_text(text, encoding='utf-8')
+
+          def patch(path, old, new):
+              text = read(path)
+              if old in text and new not in text:
+                  write(path, text.replace(old, new, 1))
+
+          def font(size, bold=False):
+              choices = [
+                '/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc' if bold else '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc',
+                '/usr/share/fonts/truetype/noto/NotoSansCJK-Bold.ttc' if bold else '/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc',
+                '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf' if bold else '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
+              ]
+              for choice in choices:
+                  if Path(choice).exists():
+                      return ImageFont.truetype(choice, size)
+              return ImageFont.load_default()
+
+          def rr(draw, box, radius, fill):
+              draw.rounded_rectangle(box, radius=radius, fill=fill)
+
+          img_dir = ROOT / 'assets/images'
+          img_dir.mkdir(parents=True, exist_ok=True)
+
+          def draw_leaf(draw, cx, cy, scale=1.0):
+              green = '#2f6f50'
+              light = '#bcdcc5'
+              draw.ellipse([cx-86*scale, cy-55*scale, cx+5*scale, cy+64*scale], fill=light)
+              draw.ellipse([cx-5*scale, cy-75*scale, cx+88*scale, cy+48*scale], fill=green)
+              draw.line([cx, cy+82*scale, cx, cy-24*scale], fill='#183c2d', width=max(2,int(10*scale)))
+
+          def make_og(filename, title, subtitle, typ='', tags=()):
+              im = Image.new('RGB', (1200, 630), '#f6fbf6')
+              d = ImageDraw.Draw(im)
+              rr(d, [48, 42, 1152, 588], 42, '#ffffff')
+              rr(d, [790, 94, 1082, 406], 38, '#e5f1e8')
+              draw_leaf(d, 936, 235, 1.0)
+              d.text((92, 84), 'EmoSeed · DIGITAL GARDEN', font=font(27, True), fill='#2f6f50')
+              d.text((92, 158), title, font=font(58, True), fill='#183c2d')
+              lines = []
+              line = ''
+              f = font(29)
+              for ch in subtitle:
+                  if d.textlength(line + ch, font=f) > 630 and line:
+                      lines.append(line)
+                      line = ch
+                  else:
+                      line += ch
+              if line:
+                  lines.append(line)
+              y = 324
+              for line in lines[:2]:
+                  d.text((94, y), line, font=f, fill='#52665b')
+                  y += 45
+              x = 92
+              for tag in list(tags)[:3]:
+                  tf = font(21, True)
+                  width = int(d.textlength(tag, font=tf)) + 40
+                  rr(d, [x, 470, x + width, 514], 22, '#e7f2e9')
+                  d.text((x + 20, 480), tag, font=tf, fill='#245b41')
+                  x += width + 12
+              if typ:
+                  d.text((836, 328), typ, font=font(45, True), fill='#183c2d')
+              d.text((92, 546), 'emoseed.lavalabs.co.kr', font=font(19, True), fill='#8a978f')
+              im.save(img_dir / filename, optimize=True)
+
+          make_og('og-image.png', '작은 디지털 정원', '나와 닮은 식물, 오늘의 운세와 감성 이름을 만나보세요.', '', ['회원가입 없음','1분 테스트','결과 저장'])
+          for typ, name, tagline, quote, tags in plants:
+              make_og(f'og-{typ.lower()}.png', f'{typ} · {name}', tagline, typ, tags)
+
+          def make_icon(size, filename, mask=False):
+              im = Image.new('RGBA', (size, size), (246, 251, 246, 255))
+              d = ImageDraw.Draw(im)
+              pad = int(size * (0.13 if mask else 0.06))
+              rr(d, [pad, pad, size-pad, size-pad], int(size*.22), '#dceee1')
+              draw_leaf(d, size*.5, size*.43, size/570)
+              d.text((size*.405, size*.66), 'E', font=font(int(size*.18), True), fill='#183c2d')
+              im.save(img_dir / filename, optimize=True)
+
+          make_icon(180, 'apple-touch-icon.png')
+          make_icon(192, 'icon-192.png')
+          make_icon(512, 'icon-512.png')
+          make_icon(512, 'icon-maskable-512.png', True)
+
+          manifest = {
+            'name': 'EmoSeed — 작은 디지털 정원',
+            'short_name': 'EmoSeed',
+            'description': '매일 마음을 식물처럼 천천히 들여다보는 작은 디지털 정원',
+            'start_url': '/', 'scope': '/', 'display': 'standalone',
+            'background_color': '#f6fbf6', 'theme_color': '#2f6f50', 'lang': 'ko-KR',
+            'icons': [
+              {'src':'/assets/images/icon-192.png','sizes':'192x192','type':'image/png','purpose':'any'},
+              {'src':'/assets/images/icon-512.png','sizes':'512x512','type':'image/png','purpose':'any'},
+              {'src':'/assets/images/icon-maskable-512.png','sizes':'512x512','type':'image/png','purpose':'maskable'},
+            ],
+            'shortcuts': [
+              {'name':'오늘의 식물 운세','url':'/fortune/result.html','description':'오늘의 식물 메시지 보기'},
+              {'name':'나와 닮은 식물','url':'/mbti/index.html','description':'EmoSeed Type 테스트 시작'},
+            ]
+          }
+          write('manifest.webmanifest', json.dumps(manifest, ensure_ascii=False, indent=2))
+
+          v3js = r'''(() => {
+            const KEY = { garden:'emoseed-garden-v3', feedback:'emoseed-feedback-v3', analytics:'emoseed-analytics-v3', recent:'emoseed-recent-v3' };
+            const validTypes = ['INFP','INFJ','INTP','INTJ','ISFP','ISTP','ISFJ','ISTJ','ENFP','ENFJ','ENTP','ENTJ','ESFP','ESTP','ESFJ','ESTJ'];
+            const read = (key, fallback=[]) => { try { return JSON.parse(localStorage.getItem(key) || 'null') || fallback; } catch (_) { return fallback; } };
+            const save = (key, value) => { try { localStorage.setItem(key, JSON.stringify(value)); } catch (_) {} };
+            const todayKey = (d=new Date()) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+            const toast = (message) => window.EmoSeedApp?.toast?.(message);
+            const currentType = () => {
+              const query = new URLSearchParams(location.search).get('type')?.toUpperCase();
+              if (validTypes.includes(query)) return query;
+              const pathMatch = location.pathname.match(/\/type\/([a-z]{4})\/?/i)?.[1]?.toUpperCase();
+              if (validTypes.includes(pathMatch)) return pathMatch;
+              const text = document.querySelector('.result-kicker, #resultType')?.textContent || '';
+              return validTypes.find((type) => text.includes(type)) || '';
+            };
+            const currentName = () => document.querySelector('.result-title, #plantName, #mainResult')?.textContent?.trim() || '';
+
+            function localTrack(eventName, detail={}) {
+              const queue = read(KEY.analytics, []);
+              queue.push({ eventName, ...detail, path:location.pathname, at:new Date().toISOString() });
+              save(KEY.analytics, queue.slice(-250));
+            }
+            window.addEventListener('emoseed:analytics', (event) => localTrack(event.detail?.eventName || 'event', event.detail || {}));
+
+            function recordRecent() {
+              if (!/result\.html|\/type\//.test(location.pathname)) return;
+              setTimeout(() => {
+                const type = currentType();
+                const name = currentName();
+                if (!type && !name) return;
+                const recent = read(KEY.recent, []).filter((item) => !(item.type === type && item.name === name));
+                recent.unshift({ type, name, url: location.href, date: todayKey() });
+                save(KEY.recent, recent.slice(0, 3));
+                renderRecent();
+              }, 550);
+            }
+
+            function renderRecent() {
+              document.querySelectorAll('[data-v3-recent]').forEach((target) => {
+                const recent = read(KEY.recent, []);
+                target.innerHTML = `<div class="garden-card"><span class="eyebrow">Recently Bloomed</span><h2>최근 만난 식물</h2>${recent.length ? `<div class="related-grid">${recent.map((item) => `<a class="related-card" href="${item.url}"><strong>${item.type || '🌿'} ${item.name}</strong><span>${item.date}에 만난 결과</span></a>`).join('')}</div>` : '<p>아직 만난 결과가 없어요. 첫 테스트를 시작해보세요.</p>'}</div>`;
+              });
+            }
+
+            function recordGarden(data) {
+              const key = data.date || todayKey();
+              const list = read(KEY.garden, []).filter((entry) => entry.date !== key);
+              list.push({ date:key, plant:data.plant || '오늘의 식물', type:data.type || '', mood:data.mood || '', at:new Date().toISOString() });
+              list.sort((a,b) => a.date.localeCompare(b.date));
+              save(KEY.garden, list.slice(-35));
+              renderGarden();
+              localTrack('garden_record', { date:key, plant:data.plant, mood:data.mood || '' });
+            }
+
+            function renderGarden() {
+              const entries = read(KEY.garden, []);
+              document.querySelectorAll('[data-v3-garden]').forEach((target) => {
+                const days = [];
+                for (let i=6; i>=0; i-=1) {
+                  const d = new Date(); d.setDate(d.getDate()-i);
+                  const key = todayKey(d); days.push({ key, label:`${d.getMonth()+1}/${d.getDate()}`, entry:entries.find((e) => e.date === key) });
+                }
+                const filled = days.filter((day) => day.entry).length;
+                const moods = days.map((day) => day.entry?.mood).filter(Boolean);
+                const summary = filled === 7 ? '이번 주 정원이 모두 피었어요. 천천히 이어온 기록이 꽤 단단합니다.' : filled >= 4 ? '정원이 절반 이상 피었어요. 며칠만 더 이어가면 이번 주 마음의 리듬이 보여요.' : '오늘의 운세를 열 때마다 정원에 식물이 하나씩 심어집니다.';
+                const moodText = moods.length ? `이번 주에 남긴 마음: ${moods.join(' · ')}` : '감정을 함께 기록하면 한 주의 마음 흐름도 볼 수 있어요.';
+                target.innerHTML = `<div class="garden-card"><span class="eyebrow">My 7-day Garden</span><h2>나의 7일 정원</h2><p>${summary}</p><div class="garden-strip">${days.map((day) => day.entry ? `<div class="garden-day" title="${day.entry.plant}${day.entry.mood ? ` · ${day.entry.mood}` : ''}"><span>🌿</span><strong>${day.entry.plant}</strong><small>${day.label}</small></div>` : `<div class="garden-day empty"><span>·</span><strong>비어있음</strong><small>${day.label}</small></div>`).join('')}</div><p class="disclaimer">${moodText}<br>기록은 이 기기의 브라우저에만 저장됩니다.</p></div>`;
+              });
+            }
+
+            function initFeedback() {
+              document.querySelectorAll('[data-v3-feedback]').forEach((box) => {
+                box.querySelectorAll('[data-feedback-value]').forEach((button) => button.addEventListener('click', () => {
+                  box.querySelectorAll('[data-feedback-value]').forEach((item) => item.setAttribute('aria-pressed', item === button ? 'true' : 'false'));
+                  const list = read(KEY.feedback, []);
+                  const payload = { target:box.dataset.v3Feedback, value:button.dataset.feedbackValue, result:currentType() || currentName(), at:new Date().toISOString() };
+                  list.push(payload); save(KEY.feedback, list.slice(-100)); localTrack('feedback_submit', payload);
+                  toast('피드백을 저장했어요. 다음 정원 개선에 참고할게요.');
+                }));
+              });
+            }
+
+            function compatibility(a,b) {
+              let score = 58;
+              for (let i=0;i<4;i+=1) score += a[i] === b[i] ? 8 : 3;
+              return Math.min(98, score);
+            }
+
+            function initFriendCompare() {
+              const invited = new URLSearchParams(location.search).get('friendType')?.toUpperCase();
+              if (validTypes.includes(invited)) sessionStorage.setItem('emoseed-friend-type', invited);
+              setTimeout(() => {
+                const mine = currentType();
+                const friend = sessionStorage.getItem('emoseed-friend-type');
+                const target = document.querySelector('[data-v3-friend]');
+                if (target && validTypes.includes(mine)) {
+                  const inviteUrl = `${location.origin}/mbti/index.html?friendType=${mine}`;
+                  if (validTypes.includes(friend) && friend !== mine) {
+                    const score = compatibility(mine, friend);
+                    target.innerHTML = `<div class="garden-card"><span class="eyebrow">Friend Garden</span><h2>${friend} 친구와 나의 정원 궁합</h2><p><strong>${score}점</strong> · 서로의 다른 리듬을 알아갈수록 더 풍성해지는 조합이에요.</p><div class="button-row"><button class="primary-button" type="button" data-friend-share>친구에게 결과 공유</button><a class="secondary-button" href="${inviteUrl}">다른 친구 초대</a></div></div>`;
+                    target.querySelector('[data-friend-share]')?.addEventListener('click', () => window.EmoSeedApp?.share?.({ title:`${mine}와 ${friend}의 정원 궁합`, text:`우리의 EmoSeed 정원 궁합은 ${score}점이에요.`, url:location.href }));
+                  } else {
+                    target.innerHTML = `<div class="garden-card"><span class="eyebrow">Friend Garden</span><h2>친구와 식물 유형을 비교해보세요</h2><p>친구가 테스트를 끝내면 두 사람의 정원 궁합을 바로 보여드려요.</p><div class="button-row"><button class="primary-button" type="button" data-copy-invite>친구에게 테스트 보내기</button></div></div>`;
+                    target.querySelector('[data-copy-invite]')?.addEventListener('click', () => window.EmoSeedApp?.share?.({ title:'나와 닮은 식물 테스트', text:`나는 ${mine} 유형이 나왔어요. 너의 식물도 만나볼래?`, url:inviteUrl }));
+                  }
+                }
+              }, 650);
+            }
+
+            function wrapShareForStaticType() {
+              setTimeout(() => {
+                const type = currentType();
+                if (!validTypes.includes(type) || !window.EmoSeedApp?.share) return;
+                const fixed = `${location.origin}/type/${type.toLowerCase()}/`;
+                document.querySelectorAll('[data-copy-link]').forEach((button) => button.dataset.copyLink = fixed);
+                if (window.EmoSeedApp.share.__v3wrapped) return;
+                const original = window.EmoSeedApp.share;
+                const wrapped = (options={}) => original({ ...options, url: validTypes.includes(currentType()) ? `${location.origin}/type/${currentType().toLowerCase()}/` : options.url });
+                wrapped.__v3wrapped = true;
+                window.EmoSeedApp.share = wrapped;
+              }, 700);
+            }
+
+            function wrapText(ctx, text, x, y, maxWidth, lineHeight, maxLines=8) {
+              const chars = Array.from(text || ''); let line=''; let lines=[];
+              chars.forEach((ch) => { const test=line+ch; if (ctx.measureText(test).width > maxWidth && line) { lines.push(line); line=ch; } else line=test; });
+              if (line) lines.push(line); lines=lines.slice(0,maxLines);
+              lines.forEach((value,index) => ctx.fillText(value,x,y+index*lineHeight));
+              return y+lines.length*lineHeight;
+            }
+
+            async function resultImage(format='post') {
+              const sizes = { story:[1080,1920], post:[1080,1350], link:[1200,630] };
+              const [w,h] = sizes[format] || sizes.post;
+              const canvas=document.createElement('canvas'); canvas.width=w; canvas.height=h;
+              const ctx=canvas.getContext('2d'); ctx.fillStyle='#f6fbf6'; ctx.fillRect(0,0,w,h);
+              const margin=Math.round(w*.075); const top=Math.round(h*.08);
+              ctx.fillStyle='#fff'; ctx.beginPath(); ctx.roundRect(margin,top,w-margin*2,h-top*2,Math.round(w*.035)); ctx.fill();
+              const title=currentName() || document.querySelector('h1')?.textContent?.trim() || 'EmoSeed Result';
+              const kicker=document.querySelector('.result-kicker, #resultType')?.textContent?.trim() || 'EMOSEED · DIGITAL GARDEN';
+              const subtitle=document.querySelector('.result-subtitle, #resultMessage, #fortuneMessage, #plantMessage')?.textContent?.trim() || '오늘의 마음에 작은 씨앗 하나';
+              const quote=document.querySelector('.quote-card, #resultQuote')?.textContent?.trim() || '';
+              ctx.fillStyle='#2f6f50'; ctx.font=`700 ${Math.round(w*.025)}px sans-serif`; ctx.fillText(kicker,margin*1.45,top+Math.round(h*.09));
+              ctx.fillStyle='#183c2d'; ctx.font=`800 ${Math.round(w*(format==='link'?.052:.062))}px sans-serif`; let y=wrapText(ctx,title,margin*1.45,top+Math.round(h*.18),w-margin*3,Math.round(w*.075),3);
+              ctx.fillStyle='#52665b'; ctx.font=`500 ${Math.round(w*.027)}px sans-serif`; y=wrapText(ctx,subtitle,margin*1.45,y+Math.round(h*.04),w-margin*3,Math.round(w*.043),5);
+              if (quote) { ctx.fillStyle='#2f6f50'; ctx.font=`700 ${Math.round(w*.026)}px sans-serif`; wrapText(ctx,quote,margin*1.45,y+Math.round(h*.05),w-margin*3,Math.round(w*.043),4); }
+              ctx.fillStyle='#8a978f'; ctx.font=`600 ${Math.round(w*.018)}px sans-serif`; ctx.fillText('emoseed.lavalabs.co.kr',margin*1.45,h-top-Math.round(h*.05));
+              return canvas;
+            }
+
+            function initImageTools() {
+              document.querySelectorAll('[data-v3-image-tools]').forEach((target) => {
+                target.innerHTML = `<div class="garden-card"><h3>공유 이미지 만들기</h3><p class="disclaimer">사용할 곳에 맞는 크기를 골라 저장하세요.</p><div class="format-row"><button class="format-chip" data-format="story" type="button">스토리 1080×1920</button><button class="format-chip selected" data-format="post" type="button">게시물 1080×1350</button><button class="format-chip" data-format="link" type="button">링크 1200×630</button></div><div class="button-row"><button class="primary-button" data-download-format type="button">선택 크기로 저장</button></div></div>`;
+                let format='post';
+                target.querySelectorAll('[data-format]').forEach((button) => button.addEventListener('click', () => { format=button.dataset.format; target.querySelectorAll('[data-format]').forEach((item) => item.classList.toggle('selected', item===button)); }));
+                target.querySelector('[data-download-format]')?.addEventListener('click', async () => { const canvas=await resultImage(format); const link=document.createElement('a'); link.download=`EmoSeed_${currentType() || 'result'}_${format}.png`; link.href=canvas.toDataURL('image/png'); link.click(); toast('선택한 크기로 이미지를 저장했어요.'); localTrack('result_image_save',{format,result:currentType() || currentName()}); });
+              });
+            }
+
+            function initMood() {
+              document.querySelectorAll('[data-v3-mood]').forEach((box) => box.querySelectorAll('[data-mood]').forEach((button) => button.addEventListener('click', () => {
+                box.querySelectorAll('[data-mood]').forEach((item) => item.setAttribute('aria-pressed',item===button?'true':'false'));
+                recordGarden({ plant:currentName() || '오늘의 식물', type:currentType(), mood:button.dataset.mood });
+                toast('오늘의 마음을 정원에 기록했어요.');
+              })));
+              if (/fortune\/result\.html/.test(location.pathname)) setTimeout(() => recordGarden({ plant:currentName() || '오늘의 식물', type:currentType() }), 650);
+            }
+
+            let installEvent=null;
+            function initInstall() {
+              const addButton = () => {
+                const panel=document.querySelector('.drawer-panel'); if (!panel || panel.querySelector('[data-v3-install]')) return;
+                const button=document.createElement('button'); button.className='drawer-install'; button.type='button'; button.dataset.v3Install=''; button.textContent='📲 홈 화면에 추가';
+                panel.insertBefore(button,panel.querySelector('.theme-panel'));
+                button.addEventListener('click', async () => { if (installEvent) { installEvent.prompt(); const choice=await installEvent.userChoice.catch(()=>null); localTrack('pwa_install',{outcome:choice?.outcome || 'unknown'}); installEvent=null; button.hidden=true; } else toast('브라우저 메뉴에서 홈 화면에 추가를 선택해주세요.'); });
+              };
+              window.addEventListener('beforeinstallprompt',(event)=>{event.preventDefault();installEvent=event;addButton();});
+              setTimeout(addButton,500);
+            }
+
+            function initUpdate() {
+              if (!('serviceWorker' in navigator)) return;
+              navigator.serviceWorker.ready.then((registration) => {
+                registration.addEventListener('updatefound', () => {
+                  const worker=registration.installing;
+                  worker?.addEventListener('statechange', () => { if (worker.state==='installed' && navigator.serviceWorker.controller) { const box=document.createElement('div'); box.className='update-toast show'; box.innerHTML='<span>새로운 정원이 준비됐어요.</span><button type="button">새로고침</button>'; document.body.appendChild(box); box.querySelector('button').onclick=()=>location.reload(); } });
+                });
+              }).catch(()=>{});
+            }
+
+            function addDate() {
+              const panel=document.querySelector('.share-panel'); if (!panel || panel.querySelector('.result-date')) return;
+              const date=document.createElement('p'); date.className='result-date disclaimer'; date.textContent=`기록한 날 · ${new Intl.DateTimeFormat('ko-KR',{dateStyle:'long'}).format(new Date())}`; panel.prepend(date);
+            }
+
+            function init() {
+              localTrack('page_view'); renderGarden(); renderRecent(); recordRecent(); initFeedback(); initFriendCompare(); wrapShareForStaticType(); initImageTools(); initMood(); initInstall(); initUpdate(); addDate();
+              document.querySelectorAll('.business-details').forEach((el)=>el.setAttribute('data-nosnippet',''));
+            }
+            if (document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+          })();'''
+          write('assets/js/v3.js', v3js)
+
+          css = read('assets/css/style.css')
+          marker = '/* EmoSeed v3 service additions */'
+          if marker not in css:
+              css += r'''
+
+          /* EmoSeed v3 service additions */
+          .garden-card,.feedback-card{background:rgba(255,255,255,.88);border:1px solid rgba(47,111,80,.14);border-radius:28px;padding:clamp(20px,4vw,34px);box-shadow:var(--shadow-soft)}
+          .garden-card h2,.garden-card h3,.feedback-card h3{margin-top:0}.garden-strip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;margin:18px 0}.garden-day{min-height:78px;border-radius:18px;background:#f1f7f2;border:1px solid rgba(47,111,80,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-weight:800;color:#245b41;text-align:center;padding:6px}.garden-day.empty{color:#9aa9a0;background:#f8fbf8}.garden-day small{font-size:12px;color:var(--muted);font-weight:700}.mood-row,.feedback-row,.format-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}.mood-chip,.feedback-chip,.format-chip,.drawer-install{border:1px solid rgba(47,111,80,.18);background:#fff;color:#245b41;border-radius:999px;padding:10px 14px;font-weight:800;cursor:pointer}.mood-chip[aria-pressed="true"],.feedback-chip[aria-pressed="true"],.format-chip.selected{background:#dceee1;border-color:#2f6f50}.drawer-install{margin:14px 20px 0;width:calc(100% - 40px)}.disclaimer,.result-date{color:var(--muted);font-size:14px;line-height:1.7}.update-toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);max-width:min(92vw,520px);z-index:90;display:none;align-items:center;gap:12px;padding:14px 16px;background:#183c2d;color:#fff;border-radius:18px;box-shadow:var(--shadow-strong)}.update-toast.show{display:flex}.update-toast button{border:0;border-radius:999px;padding:9px 12px;font-weight:900;color:#183c2d;background:#e7f2e9}.v3-stack{display:grid;gap:18px;margin-top:22px}
+          @media(max-width:640px){.garden-strip{gap:6px}.garden-day{min-height:64px;border-radius:14px;font-size:12px}.garden-day strong{max-width:100%;overflow:hidden;text-overflow:ellipsis}.format-row{display:grid;grid-template-columns:1fr}}
+          '''
+              write('assets/css/style.css', css)
+
+          type_template = '''<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>{typ} {name} — 나와 닮은 식물 | EmoSeed</title><meta name="description" content="{tagline} EmoSeed Type {typ} {name} 결과를 확인해보세요."><meta name="theme-color" content="#f6fbf6"><link rel="canonical" href="{base}/type/{lower}/"><link rel="icon" href="../../assets/images/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="../../assets/images/apple-touch-icon.png"><link rel="manifest" href="../../manifest.webmanifest"><link rel="stylesheet" href="../../assets/css/style.css"><meta property="og:type" content="website"><meta property="og:site_name" content="EmoSeed"><meta property="og:locale" content="ko_KR"><meta property="og:title" content="{typ} {name} — 나와 닮은 식물 | EmoSeed"><meta property="og:description" content="{tagline}"><meta property="og:url" content="{base}/type/{lower}/"><meta property="og:image" content="{base}/assets/images/og-{lower}.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{typ} {name} — 나와 닮은 식물 | EmoSeed"><meta name="twitter:description" content="{tagline}"><meta name="twitter:image" content="{base}/assets/images/og-{lower}.png"><script type="application/ld+json">{{"@context":"https://schema.org","@type":"WebPage","name":"{typ} {name} — 나와 닮은 식물","url":"{base}/type/{lower}/","isPartOf":{{"@type":"WebSite","name":"EmoSeed","url":"{base}/"}}}}</script><script defer src="../../assets/js/data.js"></script><script defer src="../../assets/js/app.js"></script><script defer src="../../assets/js/v3.js"></script></head><body data-base="../../" data-page="type"><div id="site-header"></div><main id="main-content" class="page-shell"><section class="page-hero compact"><span class="eyebrow">EmoSeed Type</span><h1>{typ} · {name}</h1><p>{tagline}</p></section><section class="result-shell"><article class="result-card"><div class="result-header"><div><div class="result-kicker">{typ} · EMOSEED TYPE</div><h2 class="result-title">{name}</h2><p class="result-subtitle">{tagline}</p><div class="keyword-list">{chips}</div></div><img class="result-image" src="../../assets/images/{lower}.svg" alt="{name} 일러스트"></div><div class="quote-card">“{quote}”</div><div class="detail-grid" id="staticDetails"></div></article><div class="share-panel"><p>친구에게 이 결과를 보내거나 직접 테스트를 시작해보세요.</p><div class="button-row"><a class="primary-button" href="../../mbti/index.html?friendType={typ}">친구 유형 비교 시작</a><button class="secondary-button" data-share data-share-title="{typ} {name} — 나와 닮은 식물" data-share-text="{tagline}" type="button">공유하기</button></div></div><div class="v3-stack"><div data-v3-friend></div><div data-v3-image-tools></div></div></section></main><div id="site-footer"></div><div id="toast" class="toast" role="status" aria-live="polite"></div><script>document.addEventListener('DOMContentLoaded',()=>{{const p=window.EmoSeed?.plantByType?.('{typ}');if(!p)return;document.getElementById('staticDetails').innerHTML=`<section class="detail-card"><h3>나의 강점</h3><p>${{p.strength}}</p></section><section class="detail-card"><h3>지쳤을 때</h3><p>${{p.tired}}</p></section><section class="detail-card"><h3>오늘의 돌봄</h3><p>${{p.care}}</p></section><section class="detail-card"><h3>잘 맞는 식물</h3><p>${{p.match}}</p></section>`;}});</script></body></html>'''
+          for typ, name, tagline, quote, tags in plants:
+              chips = ''.join(f'<span class="keyword">{html.escape(tag)}</span>' for tag in tags)
+              write(f'type/{typ.lower()}/index.html', type_template.format(typ=typ,name=name,tagline=tagline,quote=quote,lower=typ.lower(),chips=chips,base=BASE))
+
+          for file in ROOT.rglob('*.html'):
+              text = file.read_text(encoding='utf-8')
+              text = text.replace('https://emoseed.lavalabs.co.kr/assets/images/og-image.svg','https://emoseed.lavalabs.co.kr/assets/images/og-image.png')
+              text = re.sub(r'<link rel="apple-touch-icon" href="(?:\.\./)*assets/images/favicon\.svg">', lambda m: m.group(0).replace('favicon.svg','apple-touch-icon.png'), text)
+              if 'assets/js/app.js' in text and 'assets/js/v3.js' not in text:
+                  text = re.sub(r'(<script defer src="((?:\.\./)*)assets/js/app\.js"></script>)', r'\1<script defer src="\2assets/js/v3.js"></script>', text, count=1)
+              file.write_text(text, encoding='utf-8')
+
+          index = read('index.html')
+          if 'data-v3-garden' not in index:
+              anchor = '<section class="section">\n  <div class="section-heading"><div><span class="eyebrow">Why EmoSeed</span>'
+              block = '<section class="section compact" data-v3-garden></section>\n<section class="section compact" data-v3-recent></section>\n\n'
+              if anchor in index:
+                  index = index.replace(anchor, block + anchor, 1)
+              else:
+                  index = index.replace('</main>', block + '</main>', 1)
+          if 'application/ld+json' not in index:
+              structured = '<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"EmoSeed","url":"https://emoseed.lavalabs.co.kr/"},{"@type":"WebApplication","name":"EmoSeed","applicationCategory":"LifestyleApplication","operatingSystem":"Web","url":"https://emoseed.lavalabs.co.kr/"},{"@type":"Organization","name":"LAVALABS","url":"https://lavalabs.co.kr/"}]}</script>'
+              index = index.replace('</head>', structured + '</head>', 1)
+          write('index.html', index)
+
+          mbti_index = read('mbti/index.html')
+          if '공식 MBTI 검사' not in mbti_index:
+              mbti_index = mbti_index.replace('</div>\n</section>\n\n<section class="test-shell" id="testArea"', '<p class="disclaimer">EmoSeed Type은 자기 이해를 위한 감성 콘텐츠이며, 공식 MBTI 검사나 전문 심리 진단을 대신하지 않습니다.</p></div>\n</section>\n\n<section class="test-shell" id="testArea"', 1)
+          write('mbti/index.html', mbti_index)
+
+          result_pages = ['mbti/result.html','fortune/result.html','name-generator/result.html','compatibility/result.html']
+          for path in result_pages:
+              text = read(path)
+              if 'data-v3-image-tools' not in text:
+                  stack = '<div class="v3-stack"><div data-v3-image-tools></div><div class="feedback-card" data-v3-feedback="result"><h3>이 결과가 나와 비슷했나요?</h3><p class="disclaimer">응답은 이 기기에만 저장되며 다음 설명을 다듬는 데 참고할 수 있어요.</p><div class="feedback-row"><button class="feedback-chip" type="button" data-feedback-value="similar">꽤 비슷해요</button><button class="feedback-chip" type="button" data-feedback-value="different">조금 달라요</button></div></div>'
+                  if path == 'mbti/result.html': stack += '<div data-v3-friend></div><p class="disclaimer">EmoSeed Type은 공식 MBTI 검사나 전문 심리 진단을 대신하지 않습니다.</p>'
+                  stack += '</div>'
+                  text = text.replace('<section class="section compact">', stack + '<section class="section compact">', 1)
+              write(path, text)
+
+          fortune = read('fortune/result.html')
+          if 'data-v3-garden' not in fortune:
+              block = '<section class="section compact" data-v3-garden></section><div class="feedback-card" data-v3-mood><h3>오늘 내 마음은 어땠나요?</h3><p class="disclaimer">선택한 감정은 오늘의 정원 기록에 함께 저장됩니다.</p><div class="mood-row"><button class="mood-chip" data-mood="편안해요" type="button">편안해요</button><button class="mood-chip" data-mood="지쳤어요" type="button">지쳤어요</button><button class="mood-chip" data-mood="설레요" type="button">설레요</button><button class="mood-chip" data-mood="복잡해요" type="button">복잡해요</button></div></div>'
+              fortune = fortune.replace('<div class="related-grid">', block + '<div class="related-grid">', 1)
+              write('fortune/result.html', fortune)
+
+          location = read('location.html')
+          if '자주 묻는 질문' not in location:
+              faq = '<section class="section"><h2>자주 묻는 질문</h2><details><summary>EmoSeed는 무료인가요?</summary><p>현재 모든 감성 테스트와 결과 저장 기능을 무료로 이용할 수 있습니다.</p></details><details><summary>테스트 답변이 서버에 저장되나요?</summary><p>아니요. 답변과 7일 정원 기록은 현재 이용 중인 브라우저 안에서만 처리됩니다.</p></details><details><summary>오프라인 공간에 방문할 수 있나요?</summary><p>상시 방문형 매장이 아니므로 방문이 필요한 경우 이메일로 사전 예약해주세요.</p></details></section>'
+              location = location.replace('<button class="back-btn"', faq + '<button class="back-btn"', 1)
+              write('location.html', location)
+
+          privacy = read('privacy.html')
+          if '7일 정원 기록' not in privacy:
+              privacy = privacy.replace('선택한 화면 테마는 다음 방문에도 유지되도록 브라우저의 Local Storage에 저장됩니다. 브라우저 데이터 삭제 시 함께 제거됩니다.','선택한 화면 테마, 7일 정원 기록, 결과 피드백과 최근 결과는 다음 방문 경험을 위해 브라우저 Local Storage에 저장됩니다. 브라우저 데이터 삭제 시 함께 제거됩니다.')
+              privacy = privacy.replace('<article class="info-card wide"><h2>공유 링크와 결과 이미지</h2>', '<article class="info-card wide"><h2>간단한 이용 기록</h2><p>외부 분석 서비스 없이 테스트 시작, 완료, 공유와 피드백 같은 기본 이벤트를 브라우저 안에만 보관합니다. 서버로 자동 전송하지 않습니다.</p></article><article class="info-card wide"><h2>공유 링크와 결과 이미지</h2>')
+              write('privacy.html', privacy)
+
+          app = read('assets/js/app.js')
+          if '<details class="business-details" data-nosnippet>' not in app:
+              app = app.replace('<details class="business-details">','<details class="business-details" data-nosnippet>')
+              write('assets/js/app.js', app)
+
+          core = [
+            '/', '/index.html', '/offline.html', '/404.html', '/privacy.html', '/event.html', '/location.html', '/manifest.webmanifest',
+            '/assets/css/style.css', '/assets/js/app.js', '/assets/js/data.js', '/assets/js/v3.js', '/assets/images/favicon.svg',
+            '/assets/images/og-image.png', '/assets/images/icon-192.png', '/assets/images/icon-512.png', '/assets/images/icon-maskable-512.png', '/assets/images/apple-touch-icon.png',
+            '/mbti/index.html','/mbti/result.html','/fortune/index.html','/fortune/result.html','/name-generator/index.html','/name-generator/result.html','/compatibility/index.html','/compatibility/result.html'
+          ]
+          core += [f'/assets/images/{typ.lower()}.svg' for typ,*_ in plants]
+          core += [f'/assets/images/og-{typ.lower()}.png' for typ,*_ in plants]
+          core += [f'/type/{typ.lower()}/' for typ,*_ in plants]
+          sw = "const CACHE='emoseed-v3-20260628';\nconst CORE=" + json.dumps(core, ensure_ascii=False) + ";\n" + r'''self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>Promise.all(CORE.map(url=>cache.add(url).catch(()=>null)))).then(()=>self.skipWaiting()))});
+          self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()))});
+          self.addEventListener('fetch',event=>{if(event.request.method!=='GET')return;if(event.request.mode==='navigate'){event.respondWith(fetch(event.request).then(response=>{const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));return response}).catch(()=>caches.match(event.request).then(cached=>cached||caches.match('/offline.html'))));return}event.respondWith(caches.match(event.request).then(cached=>cached||fetch(event.request).then(response=>{if(response.ok&&new URL(event.request.url).origin===location.origin){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy))}return response})))})'''
+          write('service-worker.js', sw)
+
+          urls = ['/','/mbti/index.html','/fortune/index.html','/name-generator/index.html','/compatibility/index.html','/event.html','/location.html','/privacy.html'] + [f'/type/{typ.lower()}/' for typ,*_ in plants]
+          sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(f'  <url><loc>{BASE}{url}</loc></url>\n' for url in urls) + '</urlset>\n'
+          write('sitemap.xml', sitemap)
+          write('robots.txt', f'User-agent: *\nAllow: /\nSitemap: {BASE}/sitemap.xml\n')
+          print('EmoSeed v3 build complete')
+          PY
+          python /tmp/apply_emoseed_v3.py
+
+      - name: Validate generated site
+        shell: bash
+        run: |
+          test -f type/infp/index.html
+          test -f assets/images/og-infp.png
+          test -f assets/images/icon-512.png
+          test -f assets/js/v3.js
+          grep -q 'emoseed-v3-20260628' service-worker.js
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          broken=[]
+          for page in Path('.').rglob('*.html'):
+              text=page.read_text(encoding='utf-8')
+              for value in re.findall(r'(?:href|src)="([^"]+)"',text):
+                  if value.startswith(('http:','https:','mailto:','tel:','#','data:','javascript:')): continue
+                  clean=value.split('?',1)[0].split('#',1)[0]
+                  if not clean: continue
+                  target=(page.parent/clean).resolve()
+                  if clean.endswith('/'): target=target/'index.html'
+                  if not target.exists(): broken.append((str(page),value))
+          if broken:
+              raise SystemExit('Broken links: '+repr(broken[:20]))
+          print('HTML/link validation passed')
+          PY
+
+      - name: Remove one-time workflow and commit
+        shell: bash
+        run: |
+          rm -f .github/workflows/apply-emoseed-v3.yml
+          rm -rf .deploy-v3 .deploy
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Expand EmoSeed sharing, garden, and PWA features'
+          git push
