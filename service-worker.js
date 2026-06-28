@@ -1,4 +1,4 @@
-const CACHE = 'emoseed-flowers-20260628';
+const CACHE = 'emoseed-flowers-20260628-nav';
 const CORE = [
   '/', '/index.html', '/offline.html', '/assets/css/style.css', '/assets/js/app.js', '/assets/js/data.js',
   '/assets/images/favicon.svg',
@@ -17,16 +17,13 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   if (event.request.mode === 'navigate') {
     event.respondWith(fetch(event.request).then((response) => {
-      const copy = response.clone();
-      caches.open(CACHE).then((cache) => cache.put(event.request, copy));
-      return response;
+      const copy = response.clone(); caches.open(CACHE).then((cache) => cache.put(event.request, copy)); return response;
     }).catch(() => caches.match(event.request).then((cached) => cached || caches.match('/offline.html'))));
     return;
   }
   event.respondWith(caches.match(event.request).then((cached) => cached || fetch(event.request).then((response) => {
     if (response.ok && new URL(event.request.url).origin === location.origin) {
-      const copy = response.clone();
-      caches.open(CACHE).then((cache) => cache.put(event.request, copy));
+      const copy = response.clone(); caches.open(CACHE).then((cache) => cache.put(event.request, copy));
     }
     return response;
   })));
