@@ -1,11 +1,13 @@
-const CACHE = 'emoseed-flowers-20260628-nav';
+const CACHE = 'emoseed-flowers-20260628-origin-v2';
 const CORE = [
   '/', '/index.html', '/offline.html', '/assets/css/style.css', '/assets/js/app.js', '/assets/js/data.js',
   '/assets/images/favicon.svg',
   '/mbti/index.html', '/fortune/index.html', '/name-generator/index.html', '/compatibility/index.html',
   '/flowers/index.html', '/flowers/flowers.css', '/flowers/flowers-data-1.js', '/flowers/flowers-data-2.js',
   '/flowers/flowers-data-3a.js', '/flowers/flowers-data-3b1.js', '/flowers/flowers-data-3b3.js',
-  '/flowers/flowers-data-3b5.js', '/flowers/flowers.js'
+  '/flowers/flowers-data-3b5.js', '/flowers/flowers-origins.js', '/flowers/flowers-expanded-1.js',
+  '/flowers/flowers-expanded-2.js', '/flowers/flowers-expanded-3.js', '/flowers/flowers-expanded-4.js',
+  '/flowers/flowers.js'
 ];
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(CORE)).then(() => self.skipWaiting()));
