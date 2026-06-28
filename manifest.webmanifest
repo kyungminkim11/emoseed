@@ -1,7 +1,7 @@
 {
   "name": "EmoSeed — 작은 디지털 정원",
   "short_name": "EmoSeed",
-  "description": "매일 마음을 식물처럼 천천히 들여다보는 작은 디지털 정원",
+  "description": "식물 성향 테스트, 꽃 도감, 꽃말 검색과 상황별 꽃 추천을 제공하는 작은 디지털 정원",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -10,5 +10,9 @@
   "lang": "ko-KR",
   "icons": [
     { "src": "/assets/images/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ],
+  "shortcuts": [
+    { "name": "꽃 도감", "url": "/flowers/", "description": "꽃 이름과 꽃말 검색" },
+    { "name": "오늘의 식물 운세", "url": "/fortune/result.html", "description": "오늘의 식물 메시지 보기" }
   ]
 }
