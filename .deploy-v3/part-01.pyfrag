@@ -1,0 +1,96 @@
+    "theme_color": "#2f6f50",
+    "lang": "ko-KR",
+    "icons": [
+        {"src":"/assets/images/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
+        {"src":"/assets/images/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"},
+        {"src":"/assets/images/icon-maskable-512.png","sizes":"512x512","type":"image/png","purpose":"maskable"}
+    ],
+    "shortcuts": [
+        {"name":"오늘의 식물 운세","url":"/fortune/result.html","description":"오늘의 식물 메시지 보기"},
+        {"name":"나와 닮은 식물","url":"/mbti/index.html","description":"EmoSeed Type 테스트 시작"}
+    ]
+}
+write('manifest.webmanifest', json.dumps(manifest, ensure_ascii=False, indent=2))
+
+type_template = '''<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{type} {name} — 나와 닮은 식물 | EmoSeed</title>
+  <meta name="description" content="{tagline} EmoSeed Type {type} {name} 결과를 확인해보세요.">
+  <meta name="theme-color" content="#f6fbf6">
+  <meta name="color-scheme" content="light">
+  <link rel="canonical" href="{base}/type/{lower}/">
+  <link rel="icon" href="../../assets/images/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../../assets/images/apple-touch-icon.png">
+  <link rel="manifest" href="../../manifest.webmanifest">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="EmoSeed">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:title" content="{type} {name} — 나와 닮은 식물 | EmoSeed">
+  <meta property="og:description" content="{tagline}">
+  <meta property="og:url" content="{base}/type/{lower}/">
+  <meta property="og:image" content="{base}/assets/images/og-{lower}.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{type} {name} — 나와 닮은 식물 | EmoSeed">
+  <meta name="twitter:description" content="{tagline}">
+  <meta name="twitter:image" content="{base}/assets/images/og-{lower}.png">
+  <script defer src="../../assets/js/data.js"></script>
+  <script defer src="../../assets/js/app.js"></script>
+</head>
+<body data-base="../../" data-page="type">
+  <div id="site-header"></div>
+  <main id="main-content" class="page-shell">
+    <section class="page-hero compact"><span class="eyebrow">🌱 EmoSeed Type</span><h1>{type} · {name}</h1><p>{tagline}</p></section>
+    <section class="result-shell">
+      <article class="result-card">
+        <div class="result-header"><div><div class="result-kicker">{type} · EMOSEED TYPE</div><h2 class="result-title">{name}</h2><p class="result-subtitle">{tagline}</p><div class="keyword-list">{chips}</div></div><img class="result-image" src="../../assets/images/{lower}.svg" alt="{name} 일러스트"></div>
+        <div class="quote-card">“{quote}”</div>
+      </article>
+      <div class="share-panel"><p>이 결과는 공유용 고정 페이지예요. 내 결과를 다시 확인하거나 친구에게 테스트를 보내보세요.</p><div class="button-row"><a class="primary-button" href="../../mbti/index.html">나도 테스트하기</a><button class="secondary-button" data-share data-share-title="{type} {name} — 나와 닮은 식물" data-share-text="{tagline}" type="button">공유하기</button></div></div>
+      <section class="section compact"><div class="related-grid"><a class="related-card" href="../../fortune/index.html"><strong>🔮 오늘의 운세</strong><span>오늘의 식물이 건네는 한마디</span></a><a class="related-card" href="../../compatibility/index.html"><strong>💘 식물 궁합</strong><span>나와 식물의 감성 점수</span></a></div></section>
+    </section>
+  </main>
+  <div id="site-footer"></div><div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
+'''
+for typ,name,tagline,quote,tags in plants:
+    chips = ''.join(f'<span class="keyword">{t}</span>' for t in tags)
+    write(f'type/{typ.lower()}/index.html', type_template.format(type=typ,name=name,tagline=tagline,quote=quote,lower=typ.lower(),chips=chips,base=BASE_URL))
+
+css_add = r'''
+
+/* v3 service additions */
+.notice-card, .garden-card, .feedback-card, .install-card { background: rgba(255,255,255,.86); border: 1px solid rgba(47,111,80,.14); border-radius: 28px; padding: clamp(20px, 4vw, 34px); box-shadow: var(--shadow-soft); }
+.garden-card h2, .feedback-card h3, .install-card h3 { margin-top: 0; }
+.garden-strip { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px; margin: 18px 0; }
+.garden-day { min-height: 74px; border-radius: 18px; background: #f1f7f2; border: 1px solid rgba(47,111,80,.12); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; font-weight:800; color:#245b41; }
+.garden-day.empty { color:#9aa9a0; background:#f8fbf8; }
+.garden-day small { font-size: 12px; color: var(--muted); font-weight:700; }
+.mood-row, .feedback-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
+.mood-chip, .feedback-chip, .drawer-install { border:1px solid rgba(47,111,80,.18); background:#fff; color:#245b41; border-radius:999px; padding:10px 14px; font-weight:800; cursor:pointer; }
+.mood-chip[aria-pressed="true"], .feedback-chip[aria-pressed="true"] { background:#dceee1; border-color:#2f6f50; }
+.disclaimer { color: var(--muted); font-size: 14px; line-height:1.7; margin-top:14px; }
+.update-toast { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); max-width: min(92vw, 520px); z-index: 80; display:none; align-items:center; gap:12px; padding:14px 16px; background:#183c2d; color:#fff; border-radius:18px; box-shadow: var(--shadow-strong); }
+.update-toast.show { display:flex; }
+.update-toast button { border:0; border-radius:999px; padding:9px 12px; font-weight:900; color:#183c2d; background:#e7f2e9; }
+@media (max-width: 640px) { .garden-strip { gap:7px; } .garden-day { min-height:62px; border-radius:14px; font-size:14px; } }
+'''
+style = read('assets/css/style.css')
+if '/* v3 service additions */' not in style:
+    write('assets/css/style.css', style + css_add)
+
+app = read('assets/js/app.js')
+if 'function getGardenEntries' not in app:
+    insert_before = "  function initialize() {"
+    helper = r'''
+  function safeJSON(key, fallback) {
+    try { return JSON.parse(localStorage.getItem(key) || 'null') || fallback; } catch (_) { return fallback; }
+  }
+
+  function saveJSON(key, value) {
