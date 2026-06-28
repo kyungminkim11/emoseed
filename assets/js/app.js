@@ -34,6 +34,7 @@
             ${navLink('fortune', 'fortune/index.html', '오늘의 운세')}
             ${navLink('name', 'name-generator/index.html', '식물 이름')}
             ${navLink('match', 'compatibility/index.html', '식물 궁합')}
+            ${navLink('flowers', 'flowers/index.html', '꽃 도감')}
             ${navLink('programs', 'event.html', '프로그램')}
             ${navLink('contact', 'location.html', '소개·문의')}
           </nav>
@@ -56,6 +57,7 @@
             ${navLink('fortune', 'fortune/index.html', '<span>🔮 오늘의 식물 운세</span><span>›</span>')}
             ${navLink('name', 'name-generator/index.html', '<span>🌼 나만의 식물 이름</span><span>›</span>')}
             ${navLink('match', 'compatibility/index.html', '<span>💘 식물 궁합</span><span>›</span>')}
+            ${navLink('flowers', 'flowers/index.html', '<span>🌸 꽃 도감·추천</span><span>›</span>')}
             ${navLink('programs', 'event.html', '<span>🎉 프로그램</span><span>›</span>')}
             ${navLink('contact', 'location.html', '<span>💬 소개·문의</span><span>›</span>')}
           </nav>
@@ -80,6 +82,7 @@
             <p>하루의 감정을 식물처럼 천천히 들여다보는 작은 디지털 정원입니다.</p>
           </div>
           <nav class="footer-links" aria-label="하단 메뉴">
+            <a href="${path('flowers/index.html')}">꽃 도감</a>
             <a href="${path('location.html')}">소개·문의</a>
             <a href="${path('privacy.html')}">개인정보 안내</a>
             <a href="https://lavalabs.co.kr" target="_blank" rel="noopener">LAVALABS ↗</a>
@@ -358,7 +361,6 @@
   }
 
   function track(eventName, detail = {}) {
-    // 외부 추적 도구 없이도 이후 분석 도구를 연결할 수 있도록 표준 이벤트를 발생시킵니다.
     window.dispatchEvent(new CustomEvent('emoseed:analytics', { detail: { eventName, ...detail } }));
   }
 
