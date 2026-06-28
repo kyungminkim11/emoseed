@@ -1,0 +1,31 @@
+name: Apply EmoSeed v3 directly
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/apply_v3.py'
+      - '.github/workflows/apply-v3-direct.yml'
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk
+          python -m pip install --upgrade pillow
+      - run: EMOSEED_ROOT=. python scripts/apply_v3.py
+      - run: |
+          python -m py_compile scripts/apply_v3.py
+          test -f assets/images/og-image.png
+          test -f type/infp/index.html
+          grep -q 'emoseed-v3-20260628' service-worker.js
+      - run: |
+          rm -rf scripts/apply_v3.py .github/workflows/apply-v3-direct.yml .github/workflows/apply-emoseed-v3.yml .deploy-v3
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Launch EmoSeed v3 service experience'
+          git push
