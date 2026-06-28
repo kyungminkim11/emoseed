@@ -1,5 +1,5 @@
 (() => {
-  const flowers = window.EMOSEED_FLOWERS || [];
+  let flowers = window.EMOSEED_FLOWERS || [];
   const meta = window.EMOSEED_FLOWER_META || { situations: {}, moods: {} };
   const state = { query: '', season: 'all', color: 'all', favorites: loadFavorites() };
   const seasonNames = { spring: '봄', summer: '여름', autumn: '가을', winter: '겨울' };
@@ -11,6 +11,21 @@
   }
   function saveFavorites() { try { localStorage.setItem('emoseed-flower-favorites', JSON.stringify([...state.favorites])); } catch (_) {} }
   function normalize(value='') { return String(value).toLowerCase().replace(/\s+/g, ''); }
+
+  async function loadExpandedData() {
+    const files = ['flowers-origins.js','flowers-expanded-1.js','flowers-expanded-2.js','flowers-expanded-3.js','flowers-expanded-4.js'];
+    for (const src of files) {
+      await new Promise((resolve) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = resolve;
+        script.onerror = resolve;
+        document.head.appendChild(script);
+      });
+    }
+    flowers = window.EMOSEED_FLOWERS || [];
+  }
+
   function petalPath(shape) {
     if (shape === 'notched') return '<path d="M0,-54 C24,-48 34,-24 28,-4 C18,21 -12,29 -28,4 C-35,-17 -22,-44 0,-54Z"/>';
     if (shape === 'cup') return '<path d="M0,-58 C30,-48 36,-10 22,18 C8,38 -10,38 -24,17 C-37,-10 -29,-48 0,-58Z"/>';
@@ -21,7 +36,8 @@
     if (shape === 'poppy') return '<path d="M0,-57 C35,-57 48,-24 33,7 C18,34 -18,34 -33,7 C-49,-24 -35,-57 0,-57Z"/>';
     return '<ellipse cx="0" cy="-43" rx="29" ry="44"/>';
   }
-  function flowerArt(flower, size='card') {
+
+  function flowerArt(flower) {
     const petals = Math.max(4, flower.petals || 8);
     const [main, light, center] = flower.palette;
     const radius = flower.shape === 'cluster' ? 39 : flower.shape === 'spike' ? 28 : 45;
@@ -43,25 +59,37 @@
     </svg>`;
   }
 
-  function searchableText(f) { return normalize([f.name,f.english,f.scientific,...f.meanings,f.meaningNote,...f.seasons.map(id=>seasonNames[id]||id),...f.colors.map(id=>colorNames[id]||id),...f.situations.map(id=>meta.situations[id]?.[0]||''),...f.moods.map(id=>meta.moods[id]?.[0]||'')].join(' ')); }
+  function searchableText(f) {
+    return normalize([f.name,f.english,f.scientific,f.origin,f.originNote,...f.meanings,f.meaningNote,...f.seasons.map(id=>seasonNames[id]||id),...f.colors.map(id=>colorNames[id]||id),...f.situations.map(id=>meta.situations[id]?.[0]||''),...f.moods.map(id=>meta.moods[id]?.[0]||'')].join(' '));
+  }
   function filteredFlowers() {
     const q = normalize(state.query);
     return flowers.filter(f => (!q || searchableText(f).includes(q)) && (state.season==='all'||f.seasons.includes(state.season)) && (state.color==='all'||f.colors.includes(state.color)));
   }
   function flowerCard(f) {
-    return `<article class="flower-card"><button type="button" data-flower-id="${f.id}" aria-label="${f.name} 상세 보기"><div class="flower-art">${flowerArt(f)}</div><div class="flower-body"><div class="flower-title-row"><div><h3>${f.name}</h3><div class="flower-english">${f.english} · <i>${f.scientific}</i></div></div><span aria-hidden="true">${state.favorites.has(f.id)?'♥':'＋'}</span></div><div class="meaning-tags">${f.meanings.map(v=>`<span class="meaning-tag">${v}</span>`).join('')}</div><div class="flower-meta"><span>${f.bloom}</span><span>자세히 보기 →</span></div></div></button></article>`;
+    return `<article class="flower-card"><button type="button" data-flower-id="${f.id}" aria-label="${f.name} 상세 보기"><div class="flower-art">${flowerArt(f)}</div><div class="flower-body"><div class="flower-title-row"><div><h3>${f.name}</h3><div class="flower-english">${f.english} · <i>${f.scientific}</i></div></div><span aria-hidden="true">${state.favorites.has(f.id)?'♥':'＋'}</span></div><div class="meaning-tags">${f.meanings.map(v=>`<span class="meaning-tag">${v}</span>`).join('')}</div><div class="flower-english">🌍 ${f.origin || '원산지 확인 중'}</div><div class="flower-meta"><span>${f.bloom}</span><span>자세히 보기 →</span></div></div></button></article>`;
   }
   function renderGrid() {
     const list = filteredFlowers();
     document.getElementById('flowerCount').textContent = `${list.length}개의 꽃`;
     const grid = document.getElementById('flowerGrid');
-    grid.innerHTML = list.length ? list.map(flowerCard).join('') : '<div class="empty-state"><strong>검색 결과가 없어요.</strong><p>꽃 이름이나 꽃말을 조금 짧게 입력해보세요.</p></div>';
+    grid.innerHTML = list.length ? list.map(flowerCard).join('') : '<div class="empty-state"><strong>검색 결과가 없어요.</strong><p>꽃 이름, 꽃말이나 원산지 이름을 조금 짧게 입력해보세요.</p></div>';
     grid.querySelectorAll('[data-flower-id]').forEach(btn=>btn.addEventListener('click',()=>openFlower(btn.dataset.flowerId,true)));
+  }
+  function ensureOriginDetail() {
+    let target = document.getElementById('dialogOrigin');
+    if (target) return target;
+    const photo = document.getElementById('dialogPhotoTip')?.closest('.detail-item');
+    const item = document.createElement('div');
+    item.className = 'detail-item';
+    item.innerHTML = '<strong>원산지·자생 지역</strong><span id="dialogOrigin"></span>';
+    photo?.parentNode?.insertBefore(item, photo);
+    return item.querySelector('#dialogOrigin');
   }
   function openFlower(id, updateHash=false) {
     const f = flowers.find(x=>x.id===id); if(!f) return;
     const dialog=document.getElementById('flowerDialog');
-    document.getElementById('dialogArt').innerHTML=flowerArt(f,'large');
+    document.getElementById('dialogArt').innerHTML=flowerArt(f);
     document.getElementById('dialogName').textContent=f.name;
     document.getElementById('dialogEnglish').textContent=`${f.english} · ${f.scientific}`;
     document.getElementById('dialogMeanings').innerHTML=f.meanings.map(v=>`<span class="meaning-tag">${v}</span>`).join('');
@@ -69,9 +97,10 @@
     document.getElementById('dialogBloom').textContent=f.bloom;
     document.getElementById('dialogSeason').textContent=f.seasons.map(v=>seasonNames[v]).join(' · ');
     document.getElementById('dialogColors').textContent=f.colors.map(v=>colorNames[v]).join(' · ');
+    ensureOriginDetail().textContent = `${f.origin || '확인 중'}${f.originNote ? ` — ${f.originNote}` : ''}`;
     document.getElementById('dialogPhotoTip').textContent=f.photoTip;
     const fav=document.getElementById('favoriteFlower'); fav.dataset.id=f.id; fav.setAttribute('aria-pressed',state.favorites.has(f.id)); fav.textContent=state.favorites.has(f.id)?'♥ 즐겨찾기됨':'♡ 즐겨찾기';
-    document.getElementById('shareFlower').onclick=()=>window.EmoSeedApp?.share?.({title:`${f.name} 꽃말 | EmoSeed 꽃 도감`,text:`${f.name}의 꽃말: ${f.meanings.join(', ')}`,url:`${location.origin}${location.pathname}#${f.id}`});
+    document.getElementById('shareFlower').onclick=()=>window.EmoSeedApp?.share?.({title:`${f.name} 꽃말 | EmoSeed 꽃 도감`,text:`${f.name}의 꽃말: ${f.meanings.join(', ')} · 원산지: ${f.origin}`,url:`${location.origin}${location.pathname}#${f.id}`});
     document.getElementById('shopFlower').href=`https://map.naver.com/p/search/${encodeURIComponent(f.name+' 꽃집')}`;
     if(updateHash) history.replaceState(null,'',`#${f.id}`);
     dialog.showModal();
@@ -103,16 +132,11 @@
     navigator.geolocation.getCurrentPosition(pos=>{ status.textContent='현재 위치 근처 검색을 새 창에서 열었어요.'; window.open(mapUrl('google',query,pos.coords.latitude,pos.coords.longitude),'_blank','noopener'); },()=>{ status.textContent='위치 권한을 사용할 수 없어 지도 검색으로 연결할게요.'; window.open(mapUrl('naver',query),'_blank','noopener'); },{enableHighAccuracy:false,timeout:8000,maximumAge:300000});
   }
 
-  function injectFlowerNav(){
-    const desktop=document.querySelector('.desktop-nav');
-    if(desktop&&!desktop.querySelector('[data-flower-nav]')){const a=document.createElement('a');a.href='../flowers/index.html';a.textContent='꽃 도감';a.dataset.flowerNav='';a.setAttribute('aria-current','page');desktop.insertBefore(a,desktop.children[5]||null);}
-    const drawer=document.querySelector('.drawer-nav');
-    if(drawer&&!drawer.querySelector('[data-flower-nav]')){const a=document.createElement('a');a.href='../flowers/index.html';a.dataset.flowerNav='';a.setAttribute('aria-current','page');a.innerHTML='<span>🌸 꽃 도감·추천</span><span>›</span>';drawer.insertBefore(a,drawer.children[5]||null);}
-  }
-
-  document.addEventListener('DOMContentLoaded',()=>{
-    injectFlowerNav();
-    const search=document.getElementById('flowerSearch'); search.addEventListener('input',()=>{state.query=search.value;renderGrid();});
+  async function initializeGuide() {
+    await loadExpandedData();
+    const search=document.getElementById('flowerSearch');
+    search.placeholder='꽃 이름, 꽃말, 국가·원산지를 검색하세요 (예: 감사, 멕시코, 남아프리카)';
+    search.addEventListener('input',()=>{state.query=search.value;renderGrid();});
     document.getElementById('clearSearch').addEventListener('click',()=>{search.value='';state.query='';state.season='all';state.color='all';document.querySelectorAll('.filter-chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.filterSeason==='all'||b.dataset.filterColor==='all'?'true':'false'));renderGrid();search.focus();});
     document.querySelectorAll('[data-filter-season]').forEach(btn=>btn.addEventListener('click',()=>{state.season=btn.dataset.filterSeason;document.querySelectorAll('[data-filter-season]').forEach(b=>b.setAttribute('aria-pressed',b===btn));renderGrid();}));
     document.querySelectorAll('[data-filter-color]').forEach(btn=>btn.addEventListener('click',()=>{state.color=btn.dataset.filterColor;document.querySelectorAll('[data-filter-color]').forEach(b=>b.setAttribute('aria-pressed',b===btn));renderGrid();}));
@@ -126,5 +150,8 @@
     document.getElementById('favoriteFlower').addEventListener('click',e=>{const id=e.currentTarget.dataset.id;if(state.favorites.has(id))state.favorites.delete(id);else state.favorites.add(id);saveFavorites();renderGrid();e.currentTarget.setAttribute('aria-pressed',state.favorites.has(id));e.currentTarget.textContent=state.favorites.has(id)?'♥ 즐겨찾기됨':'♡ 즐겨찾기';window.EmoSeedApp?.toast?.(state.favorites.has(id)?'즐겨찾기에 저장했어요.':'즐겨찾기에서 뺐어요.');});
     renderGrid(); recommendBy('situations','thanks'); recommendBy('moods','tired');
     const hash=location.hash.slice(1); if(hash&&flowers.some(f=>f.id===hash))setTimeout(()=>openFlower(hash,false),100);
-  });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initializeGuide);
+  else initializeGuide();
 })();
