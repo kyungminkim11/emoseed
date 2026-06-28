@@ -1,4 +1,110 @@
-<!DOCTYPE html>
-<html lang="ko"><head><meta charset="UTF-8"><link rel="icon" href="../assets/images/favicon.svg" type="image/svg+xml"><meta name="viewport" content="width=device-width,initial-scale=1"><title>오늘의 식물 운세 | EmoSeed</title><link rel="stylesheet" href="../assets/css/style.css"><style>body{transition:background-color .3s,color .3s}nav{text-align:center;margin-bottom:1.5rem;line-height:1.8}nav a{margin:0 .7rem;text-decoration:none;color:inherit;font-weight:500}nav a.active{text-decoration:underline;font-weight:700}.theme-mint{background:#e6fff3;color:#2a4d3f}.theme-beige{background:#fff6e0;color:#5e4c2a}.theme-lavender{background:#f3edff;color:#453e57}.theme-pink{background:#fff0f0;color:#5a3a3a}.theme-sky{background:#e5f4ff;color:#2c5572}.theme-status{text-align:center;margin-top:3rem}.theme-link{cursor:pointer;font-weight:500;margin:0 .2rem}</style></head><body><div class="wrapper"><main class="content"><nav><div><a href="../index.html">🏠 메인</a><a href="../location.html">📍 Contact</a><a href="../event.html">🎉 Programs</a></div><div><a href="../mbti/index.html">🌱 EmoSeed Type</a><a href="../compatibility/index.html">💘 EmoSeed Match</a><a href="../name-generator/index.html">🌼 EmoSeed Name</a><a href="index.html" class="active">🔮 EmoSeed Fortune</a></div></nav><section id="capture-area" style="text-align:center;padding:2rem 1rem"><h1 id="dateTitle"></h1><h2 id="plantName" style="color:#4a774a"></h2><img id="plantImage" alt="오늘의 식물" style="max-width:300px;width:100%;border-radius:12px"><p id="fortuneMessage" style="margin-top:2rem;font-size:1.1rem;color:#555"></p></section><div style="text-align:center"><button onclick="saveResult()">📋 결과 저장하기</button><button onclick="copyLink()">🔗 링크 복사하기</button><button onclick="shareEmail()">📧 이메일로 보내기</button><button onclick="location.href='index.html'">↩️ 다시 뽑기</button></div><hr style="margin:3rem auto;width:80%;border:none;border-top:1px solid #ccc"><div style="display:flex;flex-direction:column;align-items:center"><p><b>다른 프로그램도 체험해보세요 🌿</b></p><button onclick="location.href='../index.html'">🏠 메인 페이지로 가기</button><button onclick="goTo('mbti')">🌿 EmoSeed Type</button><button onclick="goTo('compatibility')">🌿 EmoSeed Match</button><button onclick="goTo('name-generator')">🌿 EmoSeed Name</button></div><div class="theme-status" id="themeStatus"></div><div id="footer-placeholder"></div><script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script><script>
-const map={무궁화:'INFP',라벤더:'INFJ',민트:'INTP',스투키:'INTJ',수국:'ISFP',선인장:'ISTP',알로에:'ISFJ',대나무:'ISTJ',해바라기:'ENFP',장미:'ENFJ',페퍼민트:'ENTP',튤립:'ENTJ',코스모스:'ESFP',장미허브:'ESTP',카네이션:'ESFJ',유칼립투스:'ESTJ'};const notes={무궁화:'묵묵히 해온 일이 결실을 맺을 거예요.',라벤더:'오늘은 조용히 숨을 고르며 마음을 정리해보세요.',민트:'새로운 시작에 어울리는 상쾌한 하루예요.',스투키:'자기만의 리듬을 지키며 단단하게 나아가세요.',수국:'당신의 섬세함이 빛나는 하루가 될 거예요.',선인장:'당신만의 속도로 걸어가도 충분히 괜찮아요.',알로에:'타인을 돌보는 마음만큼 나도 돌봐주세요.',대나무:'기본에 충실한 자세가 빛을 발할 거예요.',해바라기:'긍정적인 마음이 좋은 기회를 이끌 거예요.',장미:'솔직한 감정이 매력으로 다가오는 날이에요.',페퍼민트:'톡 쏘는 아이디어가 빛나는 하루예요.',튤립:'작지만 확실한 성취가 찾아올 거예요.',코스모스:'작은 일상 속 행복을 발견해보세요.',장미허브:'작은 변화가 큰 안정감을 줄 수 있어요.',카네이션:'감사의 말을 전하면 관계가 더 깊어져요.',유칼립투스:'공간과 마음을 정돈하면 아이디어가 떠올라요.'};const q=new URLSearchParams(location.search),plant=q.get('plant')||'라벤더',today=new Date(),message=notes[plant]||'오늘은 평온한 하루가 될 거예요.',shareUrl=`${location.origin}${location.pathname}?plant=${encodeURIComponent(plant)}`;document.getElementById('dateTitle').textContent=`📆 ${today.getFullYear()}년 ${today.getMonth()+1}월 ${today.getDate()}일의 식물 운세`;document.getElementById('plantName').textContent=`오늘의 식물: ${plant}`;document.getElementById('plantImage').src=`../assets/images/${(map[plant]||'INFJ').toLowerCase()}.svg`;document.getElementById('fortuneMessage').textContent=message;function saveResult(){html2canvas(document.getElementById('capture-area')).then(c=>{const a=document.createElement('a');a.download=`오늘의_식물_운세_${plant}.png`;a.href=c.toDataURL('image/png');a.click()})}function copyLink(){navigator.clipboard.writeText(shareUrl).then(()=>alert('📋 링크가 복사되었습니다!'))}function shareEmail(){location.href=`mailto:?subject=${encodeURIComponent('오늘의 식물 운세')}&body=${encodeURIComponent(message+'\n\n'+shareUrl)}`}function goTo(f){location.href=`../${f}/index.html`}const themes={mint:'🌿 민트',beige:'☕ 베이지',lavender:'💜 연보라',pink:'🍑 살구핑크',sky:'💧 하늘블루'};function applyTheme(t){document.body.className='loaded theme-'+t;localStorage.setItem('theme',t);document.getElementById('themeStatus').innerHTML=`${themes[t]} <b>테마</b>를 사용 중입니다.<br>`+Object.entries(themes).filter(([k])=>k!==t).map(([k,v])=>`<span class="theme-link" onclick="applyTheme('${k}')">${v}</span>`).join(', ')}addEventListener('load',()=>applyTheme(localStorage.getItem('theme')||'mint'));fetch('../footer.html').then(r=>r.text()).then(x=>document.getElementById('footer-placeholder').innerHTML=x)
-</script></main></div></body></html>
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>오늘의 식물 운세 결과 | EmoSeed</title>
+  <meta name="description" content="오늘의 식물과 마음의 온도, 행운의 색, 작은 행동을 확인하고 하루를 위한 메시지를 받아보세요.">
+  <meta name="theme-color" content="#f6fbf6">
+  <meta name="robots" content="noindex,follow">
+  <meta name="color-scheme" content="light">
+  <link rel="canonical" href="https://emoseed.lavalabs.co.kr/fortune/result.html">
+  <link rel="icon" href="../assets/images/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../assets/images/favicon.svg">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="EmoSeed">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:title" content="오늘의 식물 운세 결과 | EmoSeed">
+  <meta property="og:description" content="오늘의 식물과 마음의 온도, 행운의 색, 작은 행동을 확인하고 하루를 위한 메시지를 받아보세요.">
+  <meta property="og:url" content="https://emoseed.lavalabs.co.kr/fortune/result.html">
+  <meta property="og:image" content="https://emoseed.lavalabs.co.kr/assets/images/og-image.svg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="오늘의 식물 운세 결과 | EmoSeed">
+  <meta name="twitter:description" content="오늘의 식물과 마음의 온도, 행운의 색, 작은 행동을 확인하고 하루를 위한 메시지를 받아보세요.">
+  <meta name="twitter:image" content="https://emoseed.lavalabs.co.kr/assets/images/og-image.svg">
+  <script defer src="../assets/js/data.js"></script>
+  <script defer src="../assets/js/app.js"></script>
+</head>
+<body data-base="../" data-page="fortune">
+  <div id="site-header"></div>
+  <main id="main-content" class="page-shell">
+  <section class="page-hero compact"><span class="eyebrow">🔮 Daily Plant Fortune</span><h1 id="dateHeading">오늘의 정원에서<br>메시지가 도착했어요</h1></section>
+  <section class="result-shell">
+    <article class="result-card">
+      <div class="result-header">
+        <div>
+          <div class="result-kicker" id="fortuneDate"></div>
+          <h2 class="result-title" id="plantName"></h2>
+          <p class="result-subtitle" id="fortuneMessage"></p>
+          <div class="keyword-list" id="fortuneKeywords"></div>
+        </div>
+        <img class="result-image" id="fortuneImage" alt="오늘의 식물">
+      </div>
+      <div class="detail-grid">
+        <section class="detail-card"><h3>☀️ 오늘의 기운</h3><p id="energy"></p></section>
+        <section class="detail-card"><h3>🎨 행운의 색</h3><p id="luckyColor"></p></section>
+        <section class="detail-card"><h3>🫧 작은 행동</h3><p id="dailyAction"></p></section>
+        <section class="detail-card"><h3>💌 관계의 힌트</h3><p id="relationHint"></p></section>
+      </div>
+      <div class="quote-card" id="fortuneQuote"></div>
+    </article>
+    <div class="share-panel"><p>오늘의 운세는 자정까지 그대로 유지돼요.</p><div class="button-row">
+      <button class="primary-button" id="saveResult" type="button">📷 이미지 저장</button>
+      <button class="secondary-button" id="shareResult" type="button">공유하기</button>
+      <button class="secondary-button" data-copy-link type="button">링크 복사</button>
+      <a class="text-button" href="index.html">오늘의 운세 다시 보기</a>
+    </div></div>
+    <div class="related-grid">
+      <a class="related-card" href="../mbti/index.html"><strong>🌱 나와 닮은 식물</strong><span>8문항 성향 테스트</span></a>
+      <a class="related-card" href="../name-generator/index.html"><strong>🌼 식물 이름</strong><span>오늘의 감정에 이름 붙이기</span></a>
+      <a class="related-card" href="../compatibility/index.html"><strong>💘 식물 궁합</strong><span>마음에 드는 식물과 궁합</span></a>
+    </div>
+  </section>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const today = new Date();
+      const key = window.EmoSeed.todayKey(today);
+      const seed = window.EmoSeed.hash(key);
+      const plant = window.EmoSeed.dailyPlant(today);
+      const score = 62 + (seed % 37);
+      const colors = ['연둣빛', '따뜻한 살구색', '새벽 연보라', '맑은 하늘색', '크림 베이지', '노을 장밋빛', '깊은 숲 초록'];
+      const actions = ['물 한 잔을 천천히 마시며 호흡을 고르기', '좋아하는 노래 한 곡을 처음부터 끝까지 듣기', '미뤄둔 작은 일 하나만 끝내기', '오늘 고마웠던 순간을 한 줄 적기', '10분만 천천히 걷기', '창문을 열고 바깥 공기를 느끼기', '마음에 걸린 사람에게 짧은 안부 보내기'];
+      const hints = ['먼저 건넨 짧은 인사가 관계의 온도를 바꿀 수 있어요.', '설명보다 진심 어린 한 문장이 더 잘 전해지는 날이에요.', '상대의 반응을 미리 정하지 말고 천천히 들어보세요.', '고마움을 구체적으로 표현하면 마음이 가까워져요.', '혼자만의 시간도 관계를 건강하게 만드는 중요한 여백이에요.'];
+      const color = colors[(seed >> 4) % colors.length];
+      const action = actions[(seed >> 7) % actions.length];
+      const hint = hints[(seed >> 10) % hints.length];
+      const imageSrc = `../assets/images/${plant.type.toLowerCase()}.svg`;
+      const dateText = `${today.getFullYear()}년 ${today.getMonth() + 1}월 ${today.getDate()}일`;
+      document.getElementById('fortuneDate').textContent = dateText;
+      document.getElementById('plantName').textContent = plant.name;
+      document.getElementById('fortuneMessage').textContent = plant.care;
+      document.getElementById('fortuneKeywords').innerHTML = [`기운 ${score}%`, color, plant.keywords[0]].map((item) => `<span class="keyword">${item}</span>`).join('');
+      document.getElementById('energy').textContent = score >= 88 ? '새로운 일을 시작하기 좋은 맑고 힘찬 기운이에요.' : score >= 75 ? '무리하지 않아도 작은 성취가 차곡차곡 쌓이는 기운이에요.' : '속도를 줄이고 내 리듬을 돌보면 더 편안해지는 기운이에요.';
+      document.getElementById('luckyColor').textContent = `${color}을 옷이나 소품, 화면 배경에 살짝 더해보세요.`;
+      document.getElementById('dailyAction').textContent = action;
+      document.getElementById('relationHint').textContent = hint;
+      document.getElementById('fortuneQuote').textContent = `“${plant.quote}”`;
+      const image = document.getElementById('fortuneImage'); image.src = imageSrc; image.alt = `${plant.name} 일러스트`;
+      document.getElementById('saveResult').addEventListener('click', () => window.EmoSeedApp.downloadResultImage({
+        kicker: dateText, title: `오늘의 식물 · ${plant.name}`, subtitle: plant.care,
+        keywords: [`기운 ${score}%`, color, plant.keywords[0]], message: `오늘의 작은 행동: ${action}`, quote: plant.quote, imageSrc,
+        filename: `EmoSeed_오늘의운세_${key}_${plant.name}.png`
+      }));
+      document.getElementById('shareResult').addEventListener('click', () => window.EmoSeedApp.shareResultImage({
+        kicker: dateText, title: `오늘의 식물 · ${plant.name}`, subtitle: plant.care,
+        keywords: [`기운 ${score}%`, color, plant.keywords[0]], message: `오늘의 작은 행동: ${action}`, quote: plant.quote, imageSrc,
+        filename: `EmoSeed_오늘의운세_${key}_${plant.name}.png`
+      }, { title: `${dateText} 오늘의 식물은 ${plant.name}`, text: `${plant.care}
+${plant.quote}`, url: location.href }));
+      window.EmoSeedApp.track('result_view', { test: 'fortune', result: plant.name, date: key });
+    });
+  </script>
+  </main>
+  <div id="site-footer"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

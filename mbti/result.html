@@ -1,13 +1,116 @@
-<!DOCTYPE html>
-<html lang="ko"><head><meta charset="UTF-8"><link rel="icon" href="../assets/images/favicon.svg" type="image/svg+xml"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EmoSeed Type 결과</title><link rel="stylesheet" href="../assets/css/style.css"><style>
-body{transition:background-color .3s,color .3s}nav{text-align:center;margin-bottom:1.5rem;line-height:1.8}nav a{margin:0 .7rem;text-decoration:none;color:inherit;font-weight:500}nav a.active{text-decoration:underline;font-weight:700}.theme-mint{background:#e6fff3;color:#2a4d3f}.theme-beige{background:#fff6e0;color:#5e4c2a}.theme-lavender{background:#f3edff;color:#453e57}.theme-pink{background:#fff0f0;color:#5a3a3a}.theme-sky{background:#e5f4ff;color:#2c5572}.theme-status{text-align:center;margin-top:3rem;font-size:.95rem;line-height:1.6}.theme-link{cursor:pointer;font-weight:500;color:inherit;margin:0 .2rem}
-</style></head><body><div class="wrapper"><main class="content">
-<nav><div><a href="../index.html">🏠 메인</a><a href="../location.html">📍 Contact</a><a href="../event.html">🎉 Programs</a></div><div><a href="index.html" class="active">🌱 EmoSeed Type</a><a href="../compatibility/index.html">💘 EmoSeed Match</a><a href="../name-generator/index.html">🌼 EmoSeed Name</a><a href="../fortune/index.html">🔮 EmoSeed Fortune</a></div></nav>
-<section class="header-message" id="capture-area" style="padding:2rem 1rem"><h1>🌱 당신의 식물 MBTI 결과는?</h1><img id="plant-image" alt="식물 이미지" style="width:100%;max-width:400px;height:auto;border-radius:12px;margin:2rem auto 1.5rem"><p id="mbti-type" style="font-size:1.2rem;font-weight:bold"></p><p id="plant-name" style="font-size:1.5rem;color:#4a774a"></p><p id="plant-message" style="color:#555"></p></section>
-<div style="text-align:center;margin-top:2rem"><button onclick="saveFullResult()">📋 MBTI 결과 저장하기</button><button onclick="copyURL()">🔗 링크 복사하기</button><button onclick="shareEmail()">📧 이메일로 보내기</button><button onclick="location.href='index.html'">↩️ 다시 테스트하기</button></div>
-<hr style="margin:3rem auto;width:80%;border:none;border-top:1px solid #ccc"><div style="display:flex;flex-direction:column;align-items:center"><p><b>다른 프로그램도 체험해보세요 🌿</b></p><button onclick="location.href='../index.html'">🏠 메인 페이지로 가기</button><button onclick="goTo('compatibility')">🌿 EmoSeed Match</button><button onclick="goTo('name-generator')">🌿 EmoSeed Name</button><button onclick="goTo('fortune')">🌿 EmoSeed Fortune</button></div><div class="theme-status" id="themeStatus"></div><div id="footer-placeholder"></div>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script><script>
-const data={INFP:['무궁화','조용하고 깊은 이상주의자. 무궁화처럼 고요한 힘을 지닌 당신이에요.'],INFJ:['라벤더','섬세하고 따뜻한 조언자. 라벤더처럼 주변을 치유하는 힘이 있어요.'],INTP:['민트','호기심 많은 분석가. 민트처럼 시원한 관찰력을 가진 당신!'],INTJ:['스투키','논리적이고 단단한 전략가. 스투키처럼 흔들림 없는 지성인입니다.'],ISFP:['수국','감성적이고 부드러운 예술가. 수국처럼 다채로운 감정의 색을 지녔어요.'],ISTP:['선인장','실용적이고 독립적인 해결사. 선인장처럼 강인한 내면의 힘이 있습니다.'],ISFJ:['알로에','헌신적이고 조용한 보호자. 알로에처럼 상처를 감싸는 성품이에요.'],ISTJ:['대나무','책임감 강한 현실주의자. 대나무처럼 곧고 믿음직한 당신입니다.'],ENFP:['해바라기','열정 넘치고 자유로운 영혼. 해바라기처럼 언제나 밝고 긍정적이에요.'],ENFJ:['장미','사람을 이끄는 따뜻한 리더. 장미처럼 매력과 카리스마가 가득해요.'],ENTP:['페퍼민트','재치 있고 창의적인 발명가. 페퍼민트처럼 톡 쏘는 아이디어의 소유자!'],ENTJ:['튤립','대담한 통솔자. 튤립처럼 당당하고 목표 지향적인 에너지를 지녔어요.'],ESFP:['코스모스','즐겁고 에너지 넘치는 낙천주의자. 코스모스처럼 자연스럽고 따뜻해요.'],ESTP:['장미허브','모험적인 활동가. 장미허브처럼 활력 있고 감각적인 사람이에요.'],ESFJ:['카네이션','다정하고 사교적인 보호자. 카네이션처럼 따뜻한 배려심이 가득해요.'],ESTJ:['유칼립투스','현실적이고 이성적인 리더. 유칼립투스처럼 시원하고 단단한 성향입니다.']};
-const themes={mint:'🌿 민트',beige:'☕ 베이지',lavender:'💜 연보라',pink:'🍑 살구핑크',sky:'💧 하늘블루'},type=new URLSearchParams(location.search).get('type');if(data[type]){document.getElementById('mbti-type').textContent=`유형: ${type}`;document.getElementById('plant-name').textContent=`식물: ${data[type][0]}`;document.getElementById('plant-message').textContent=data[type][1];document.getElementById('plant-image').src=`../assets/images/${type.toLowerCase()}.svg`}else document.getElementById('mbti-type').textContent='결과를 불러올 수 없습니다.';
-function saveFullResult(){html2canvas(document.getElementById('capture-area')).then(c=>{const a=document.createElement('a');a.download=`EmoSeed_${type}.png`;a.href=c.toDataURL('image/png');a.click()})}function copyURL(){navigator.clipboard.writeText(location.href).then(()=>alert('📋 링크가 복사되었습니다!'))}function shareEmail(){const p=data[type]||['',''];location.href=`mailto:?subject=${encodeURIComponent('🌿 당신의 식물 MBTI는 '+type)}&body=${encodeURIComponent(`결과는 [${type} - ${p[0]}] 였어요!\n\n${p[1]}\n\n${location.href}`)}`}function goTo(f){location.href=`../${f}/index.html`}function applyTheme(t){document.body.className='loaded theme-'+t;localStorage.setItem('theme',t);document.getElementById('themeStatus').innerHTML=`${themes[t]} <b>테마</b>를 사용 중입니다.<br>`+Object.entries(themes).filter(([k])=>k!==t).map(([k,v])=>`<span class="theme-link" onclick="applyTheme('${k}')">${v}</span>`).join(', ')}addEventListener('load',()=>applyTheme(localStorage.getItem('theme')||'mint'));fetch('../footer.html').then(r=>r.text()).then(x=>document.getElementById('footer-placeholder').innerHTML=x)
-</script></main></div></body></html>
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>나와 닮은 식물 결과 | EmoSeed</title>
+  <meta name="description" content="나와 닮은 식물 유형과 강점, 지쳤을 때의 모습, 오늘의 마음 돌봄 팁을 확인해보세요.">
+  <meta name="theme-color" content="#f6fbf6">
+  <meta name="robots" content="noindex,follow">
+  <meta name="color-scheme" content="light">
+  <link rel="canonical" href="https://emoseed.lavalabs.co.kr/mbti/result.html">
+  <link rel="icon" href="../assets/images/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../assets/images/favicon.svg">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="EmoSeed">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:title" content="나와 닮은 식물 결과 | EmoSeed">
+  <meta property="og:description" content="나와 닮은 식물 유형과 강점, 지쳤을 때의 모습, 오늘의 마음 돌봄 팁을 확인해보세요.">
+  <meta property="og:url" content="https://emoseed.lavalabs.co.kr/mbti/result.html">
+  <meta property="og:image" content="https://emoseed.lavalabs.co.kr/assets/images/og-image.svg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="나와 닮은 식물 결과 | EmoSeed">
+  <meta name="twitter:description" content="나와 닮은 식물 유형과 강점, 지쳤을 때의 모습, 오늘의 마음 돌봄 팁을 확인해보세요.">
+  <meta name="twitter:image" content="https://emoseed.lavalabs.co.kr/assets/images/og-image.svg">
+  <script defer src="../assets/js/data.js"></script>
+  <script defer src="../assets/js/app.js"></script>
+</head>
+<body data-base="../" data-page="type">
+  <div id="site-header"></div>
+  <main id="main-content" class="page-shell">
+  <section class="page-hero compact">
+    <span class="eyebrow">🌱 EmoSeed Type Result</span>
+    <h1>당신을 닮은 식물을<br>만났어요</h1>
+  </section>
+  <section class="result-shell">
+    <article class="result-card" id="resultCard">
+      <div class="loading-state" id="loading"><div><div class="spinner"></div><p>결과를 피워내고 있어요…</p></div></div>
+      <div id="resultContent" hidden>
+        <div class="result-header">
+          <div>
+            <div class="result-kicker" id="resultType"></div>
+            <h2 class="result-title" id="resultTitle"></h2>
+            <p class="result-subtitle" id="resultTagline"></p>
+            <div class="keyword-list" id="keywordList"></div>
+          </div>
+          <img class="result-image" id="resultImage" alt="">
+        </div>
+        <div class="detail-grid">
+          <section class="detail-card"><h3>✨ 나의 강점</h3><p id="resultStrength"></p></section>
+          <section class="detail-card"><h3>🌧️ 지쳤을 때의 모습</h3><p id="resultTired"></p></section>
+          <section class="detail-card"><h3>🫧 오늘의 돌봄 방법</h3><p id="resultCare"></p></section>
+          <section class="detail-card"><h3>💞 잘 맞는 식물</h3><p id="resultMatch"></p></section>
+        </div>
+        <div class="quote-card" id="resultQuote"></div>
+      </div>
+    </article>
+    <div class="share-panel">
+      <p>결과를 저장하거나 친구에게 나눠보세요.</p>
+      <div class="button-row">
+        <button class="primary-button" type="button" id="saveResult">📷 이미지 저장</button>
+        <button class="secondary-button" type="button" id="shareResult">공유하기</button>
+        <button class="secondary-button" type="button" data-copy-link>링크 복사</button>
+        <a class="text-button" href="index.html">다시 테스트</a>
+      </div>
+    </div>
+    <section class="section compact">
+      <div class="section-heading"><div><h2 style="font-size:28px">다른 정원도 둘러보세요</h2></div></div>
+      <div class="related-grid">
+        <a class="related-card" href="../fortune/index.html"><strong>🔮 오늘의 운세</strong><span>오늘의 식물이 건네는 한마디</span></a>
+        <a class="related-card" href="../name-generator/index.html"><strong>🌼 식물 이름 만들기</strong><span>내 감정으로 만드는 이름</span></a>
+        <a class="related-card" href="../compatibility/index.html"><strong>💘 식물 궁합</strong><span>나와 식물의 감성 점수</span></a>
+      </div>
+    </section>
+  </section>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const type = new URLSearchParams(location.search).get('type')?.toUpperCase();
+      const valid = window.EMOSEED_DATA.plants.some((plant) => plant.type === type);
+      const plant = window.EmoSeed.plantByType(valid ? type : 'INFP');
+      const imageSrc = `../assets/images/${plant.type.toLowerCase()}.svg`;
+      document.title = `${plant.type} ${plant.name} — 나와 닮은 식물 | EmoSeed`;
+      document.getElementById('resultType').textContent = `${plant.type} · EMOSEED TYPE`;
+      document.getElementById('resultTitle').textContent = plant.name;
+      document.getElementById('resultTagline').textContent = plant.tagline;
+      document.getElementById('keywordList').innerHTML = plant.keywords.map((keyword) => `<span class="keyword">${keyword}</span>`).join('');
+      document.getElementById('resultStrength').textContent = plant.strength;
+      document.getElementById('resultTired').textContent = plant.tired;
+      document.getElementById('resultCare').textContent = plant.care;
+      document.getElementById('resultMatch').textContent = `${plant.match}처럼 서로의 다른 리듬을 편안하게 채워주는 관계예요.`;
+      document.getElementById('resultQuote').textContent = `“${plant.quote}”`;
+      const image = document.getElementById('resultImage');
+      image.src = imageSrc;
+      image.alt = `${plant.name} 일러스트`;
+      document.getElementById('loading').hidden = true;
+      document.getElementById('resultContent').hidden = false;
+      document.getElementById('saveResult').addEventListener('click', () => window.EmoSeedApp.downloadResultImage({
+        kicker: `${plant.type} · EMOSEED TYPE`, title: plant.name, subtitle: plant.tagline,
+        keywords: plant.keywords, message: plant.strength, quote: plant.quote, imageSrc,
+        filename: `EmoSeed_${plant.type}_${plant.name}.png`
+      }));
+      document.getElementById('shareResult').addEventListener('click', () => window.EmoSeedApp.share({
+        title: `${plant.type} ${plant.name} — 나와 닮은 식물`, text: `${plant.tagline}
+${plant.quote}`, url: location.href
+      }));
+      window.EmoSeedApp.track('result_view', { test: 'type', result: plant.type });
+    });
+  </script>
+  </main>
+  <div id="site-footer"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

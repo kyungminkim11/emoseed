@@ -1,298 +1,110 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>EmoSeed — 매일 마음을 돌보는 작은 디지털 정원</title>
+  <meta name="description" content="나와 닮은 식물 테스트, 오늘의 식물 운세, 감성 식물 이름과 궁합을 만나보세요.">
+  <meta name="theme-color" content="#f6fbf6">
+  <meta name="color-scheme" content="light">
+  <link rel="canonical" href="https://emoseed.lavalabs.co.kr/">
   <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>EmoSeed Garden - 감성을 심는 브랜드</title>
-  <meta name="description" content="작은 감정의 씨앗, 당신의 하루에 심어보세요. EmoSeed와 함께하는 감성 테스트" />
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
-  <style>
-    body {
-      padding: 2rem 1rem;
-      font-family: 'Noto Sans KR', sans-serif;
-      background-color: #f9fcf8;
-      color: #2a4d3f;
-      line-height: 1.6;
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    nav {
-      text-align: center;
-      margin-bottom: 1.5rem;
-      line-height: 1.8;
-    }
-    nav a {
-      margin: 0 0.7rem;
-      text-decoration: none;
-      color: inherit;
-      font-weight: 500;
-    }
-    nav a.active {
-      text-decoration: underline;
-      font-weight: 700;
-    }
-
-    /* 테마 */
-    .theme-mint { background-color: #e6fff3; color: #2a4d3f; }
-    .theme-beige { background-color: #fff6e0; color: #5e4c2a; }
-    .theme-lavender { background-color: #f3edff; color: #453e57; }
-    .theme-pink { background-color: #fff0f0; color: #5a3a3a; }
-    .theme-sky { background-color: #e5f4ff; color: #2c5572; }
-
-    .theme-status {
-      text-align: center;
-      margin-top: 3rem;
-      font-size: 0.95rem;
-      line-height: 1.6;
-    }
-    .theme-link {
-      cursor: pointer;
-      font-weight: 500;
-      color: inherit;
-      text-decoration: none;
-      margin: 0 0.2rem;
-    }
-    .theme-link:hover {
-      opacity: 0.8;
-    }
-
-    .share-box {
-      text-align: center;
-      margin: 4rem 1rem 3rem;
-    }
-    .share-title {
-      font-size: 1.1rem;
-      font-weight: bold;
-      margin-bottom: 1.5rem;
-      color: inherit;
-    }
-    .share-buttons {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-    .share-buttons button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0.7rem 1.5rem;
-      font-size: 1rem;
-      font-weight: 500;
-      background-color: #cfe8d8;
-      color: #2a4d3f;
-      border: none;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-      transition: background-color 0.2s, transform 0.2s;
-    }
-    .share-buttons button:hover {
-      background-color: #b5dbc4;
-      transform: translateY(-2px);
-    }
-    .date-display {
-      margin-top: 1rem;
-      text-align: center;
-      color: #888;
-      font-size: 0.9rem;
-      margin-bottom: 2rem;
-    }
-
-    .info-box {
-      text-align: center;
-      margin: 4rem 1rem 2rem;
-    }
-
-    .info-title {
-      font-size: 1.1rem;
-      font-weight: bold;
-      margin-bottom: 1.5rem;
-      color: inherit;
-    }
-
-    .info-buttons-horizontal {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .info-buttons-horizontal button {
-      padding: 0.7rem 1.5rem;
-      font-size: 1rem;
-      background-color: #cfe8d8;
-      color: #2a4d3f;
-      border: none;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-      transition: background-color 0.2s, transform 0.2s;
-      font-weight: 500;
-    }
-
-    .info-buttons-horizontal button:hover {
-      background-color: #b5dbc4;
-      transform: translateY(-2px);
-    }
-  </style>
+  <link rel="apple-touch-icon" href="assets/images/favicon.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="EmoSeed">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:title" content="EmoSeed — 매일 마음을 돌보는 작은 디지털 정원">
+  <meta property="og:description" content="나와 닮은 식물 테스트, 오늘의 식물 운세, 감성 식물 이름과 궁합을 만나보세요.">
+  <meta property="og:url" content="https://emoseed.lavalabs.co.kr/">
+  <meta property="og:image" content="https://emoseed.lavalabs.co.kr/assets/images/og-image.svg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="EmoSeed — 매일 마음을 돌보는 작은 디지털 정원">
+  <meta name="twitter:description" content="나와 닮은 식물 테스트, 오늘의 식물 운세, 감성 식물 이름과 궁합을 만나보세요.">
+  <meta name="twitter:image" content="https://emoseed.lavalabs.co.kr/assets/images/og-image.svg">
+  <script defer src="assets/js/data.js"></script>
+  <script defer src="assets/js/app.js"></script>
 </head>
-<body class="loaded theme-mint">
-  <div class="wrapper">
-    <main class="content">
-      <nav>
-        <div>
-          <a href="index.html" class="active">🏠 메인</a>
-          <a href="location.html">📍 Contact</a>
-          <a href="event.html">🎉 Programs</a>
-        </div>
-        <div>
-          <a href="mbti/index.html">🌱 EmoSeed Type</a>
-          <a href="compatibility/index.html">💘 EmoSeed Match</a>
-          <a href="name-generator/index.html">🌼 EmoSeed Name</a>
-          <a href="fortune/index.html">🔮 EmoSeed Fortune</a>
-        </div>
-      </nav>
-
-      <section class="header-message">
-        <p>작은 감정의 씨앗, 당신의 하루에 심어보세요</p>
-        <h1>EmoSeed Garden</h1>
-      </section>
-
-      <div class="date-display" id="todayDate"></div>
-
-      <div class="program">
-        <a href="mbti/index.html">🌱 EmoSeed Type</a>
-        <p>간단한 테스트로 나와 가장 닮은 식물을 찾아보세요.<br>당신의 마음과 닮은 식물을 감성 메시지와 함께 소개해드려요.</p>
-      </div>
-      
-      <div class="program">
-        <a href="compatibility/index.html">🌱 EmoSeed Match</a>
-        <p>나의 이름과 식물 이름의 궁합은 과연 몇 점일까요?<br>가장 잘 맞는 식물과의 감성 궁합을 확인해보세요!</p>
-      </div>
-      
-      <div class="program">
-        <a href="name-generator/index.html">🌱 EmoSeed Name</a>
-        <p>지금 당신의 감정과 분위기를 담아<br>세상에 단 하나뿐인 식물 이름을 지어보세요.</p>
-      </div>
-      
-      <div class="program">
-        <a href="fortune/index.html">🌱 EmoSeed Fortune</a>
-        <p>오늘 하루의 기운과 어울리는 식물은?<br>감성 운세 메시지와 함께 당신의 하루를 응원해드려요.</p>
-      </div>
-      
-      <div class="info-box">
-        <p class="info-title">EmoSeed와 함께하는 감성 여정 🌿</p>
-        <div class="info-buttons-horizontal">
-          <button onclick="goToLocation()">📍 오시는 길</button>
-          <button onclick="goToEvent()">🎉 진행 중인 이벤트</button>
-        </div>
-      </div>
-
-      <div class="theme-status" id="themeStatus"></div>
-      <script>
-        function goToLocation() {
-          window.location.href = "location.html";
-        }
-
-        function goToEvent() {
-          window.location.href = "event.html";
-        }
-      </script>
-      
-      <div class="share-box">
-        <p class="share-title">이 감성 페이지, 친구에게도 공유해보세요 🌿</p>
-        <div class="share-buttons">
-          <button onclick="copyLink()">🔗 링크 복사</button>
-          <button onclick="shareEmail()">📧 이메일 공유</button>
-        </div>
-      </div>
-
-      <div id="footer-placeholder"></div>
-
-      <script>
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = today.getMonth() + 1;
-        const date = today.getDate();
-        const hour = today.getHours();
-
-        const greetingsByTime = {
-          dawn: ["🌅 이른 새벽이에요.", "☕ 따뜻한 차 한잔과 함께 시작해보세요.", "🌄 새벽은 새로운 시작이에요.", "💭 오늘 어떤 하루를 보내게 될까요?", "🌙 조용한 시간 속에서 숨을 고르세요."],
-          morning: ["☀️ 좋은 아침입니다!", "🍀 오늘도 기분 좋은 하루가 되길 바라요.", "🌞 햇살 가득한 하루가 시작됐어요.", "🧘 마음의 스트레칭을 해보세요.", "📖 짧은 문장 하나로 하루를 시작해보세요."],
-          lunch: ["🍽️ 점심시간이에요. 식사는 하셨나요?", "🥗 잠시라도 여유를 가져보세요.", "☀️ 바깥 공기를 쐬어보는 것도 좋아요.", "📚 간단한 글귀 한 줄, 기분 전환이 될 거예요.", "🍵 따뜻한 차로 재정비하세요."],
-          afternoon: ["🌿 오후 햇살처럼 부드럽게 흘러가세요.", "📔 집중하기 좋은 시간이에요.", "🍀 잠시 멍 때리는 것도 괜찮아요.", "🌤️ 하늘 한번 올려다보세요.", "🎵 음악으로 기분을 바꿔보세요."],
-          evening: ["🌇 저녁이 왔어요. 수고 많으셨어요.", "🕯️ 오늘 하루를 마무리할 시간이에요.", "🍛 맛있는 저녁 드셨나요?", "🌙 좋았던 일을 떠올려보세요.", "📓 가볍게 하루를 기록해보는 건 어때요?"],
-          night: ["🌃 고요한 밤이에요.", "🛏️ 편안한 쉼이 필요해요.", "🌌 별빛 같은 하루였나요?", "📖 오늘을 마무리하는 글귀 하나.", "💤 오늘도 잘 버텨낸 당신에게 박수를!"],
-          late: ["🌌 아직 깨어 있는 당신, 고요한 밤이 감싸줘요.", "🕯️ 감성이 깊어지는 이 시간.", "🌙 모두가 잠든 밤, 나만의 여유를 즐겨요.", "💭 조용한 생각들이 스쳐 가는 밤이에요.", "🎧 좋아하는 노래와 함께 눈을 감아보세요."]
-        };
-
-        let key = "";
-        if (hour >= 4 && hour < 7) key = "dawn";
-        else if (hour >= 7 && hour < 11) key = "morning";
-        else if (hour >= 11 && hour < 13) key = "lunch";
-        else if (hour >= 13 && hour < 17) key = "afternoon";
-        else if (hour >= 17 && hour < 21) key = "evening";
-        else if (hour >= 21 && hour <= 23) key = "night";
-        else key = "late";
-
-        const greetingList = greetingsByTime[key];
-        const greeting = greetingList[Math.floor(Math.random() * greetingList.length)];
-        document.getElementById("todayDate").innerHTML = `📅 오늘은 ${year}년 ${month}월 ${date}일이에요.<br/>${greeting}`;
-
-        const themeNames = {
-          mint: "🌿 민트",
-          beige: "☕ 베이지",
-          lavender: "💜 연보라",
-          pink: "🍑 살구핑크",
-          sky: "💧 하늘블루"
-        };
-
-        function applyTheme(theme) {
-          document.body.className = "loaded";
-          document.body.classList.add(`theme-${theme}`);
-          localStorage.setItem("theme", theme);
-          updateThemeStatus(theme);
-        }
-
-        function updateThemeStatus(active) {
-          const others = Object.entries(themeNames)
-            .filter(([key]) => key !== active)
-            .map(([key, label]) => `<span class="theme-link" onclick="applyTheme('${key}')">${label}</span>`)
-            .join(", ");
-          document.getElementById("themeStatus").innerHTML = `
-            ${themeNames[active]} <strong>테마</strong>를 사용 중입니다.<br/>
-            다른 감성 테마도 경험해보세요: ${others}
-          `;
-        }
-
-        function safelyAddLoaded() {
-          const savedTheme = localStorage.getItem("theme") || "mint";
-          applyTheme(savedTheme);
-        }
-
-        window.addEventListener('DOMContentLoaded', safelyAddLoaded);
-        window.addEventListener('load', safelyAddLoaded);
-
-        function copyLink() {
-          navigator.clipboard.writeText(window.location.href).then(() => {
-            alert("📋 링크가 복사되었습니다!");
-          });
-        }
-
-        function shareEmail() {
-          const subject = "🌿 LAVALABS, 감성을 심는 브랜드를 만나보세요!";
-          const body = `LAVALABS의 다양한 감성 프로그램을 만나보세요!\n\n👇 아래 링크에서 바로 확인할 수 있어요.\n${window.location.href}`;
-          window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        }
-
-        fetch("footer.html")
-          .then(res => res.text())
-          .then(html => {
-            document.getElementById("footer-placeholder").innerHTML = html;
-          });
-      </script>
-    </main>
+<body data-base="" data-page="home">
+  <div id="site-header"></div>
+  <main id="main-content" class="page-shell">
+<section class="hero">
+  <div class="hero-copy reveal">
+    <span class="eyebrow">🌿 오늘의 마음에 작은 씨앗 하나</span>
+    <h1>내 마음을 돌보는<br><span class="accent">작은 디지털 정원</span></h1>
+    <p class="hero-lead">바쁜 하루 사이 잠깐 멈춰, 지금의 나를 식물로 만나보세요. 8개의 질문이면 충분합니다.</p>
+    <div class="hero-actions">
+      <a class="primary-button" href="mbti/index.html">🌱 1분 만에 테스트 시작</a>
+      <a class="secondary-button" href="#programs">다른 프로그램 보기</a>
+    </div>
+    <div class="hero-meta" aria-label="서비스 특징">
+      <span>✓ 회원가입 없음</span><span>✓ 휴대폰에서 바로</span><span>✓ 결과 이미지 저장</span>
+    </div>
   </div>
+  <div class="hero-visual reveal" aria-hidden="true">
+    <div class="visual-orbit"></div>
+    <div class="float-badge one">오늘의 감정 🌿</div>
+    <div class="visual-card"><img src="assets/images/enfp.svg" alt=""></div>
+    <div class="float-badge two">천천히 피어나는 중</div>
+  </div>
+</section>
+
+<section class="section" id="programs">
+  <div class="section-heading">
+    <div><span class="eyebrow">EmoSeed Programs</span><h2>지금 마음에 맞는<br>경험을 골라보세요</h2></div>
+    <p>정답을 맞히는 테스트보다, 지금의 나를 가볍게 들여다보는 경험을 만들었습니다.</p>
+  </div>
+  <div class="feature-grid">
+    <a class="feature-card" href="mbti/index.html">
+      <div><div class="feature-icon">🌱</div><h3>나와 닮은 식물</h3><p>8개의 질문으로 성향을 살펴보고, 나를 닮은 식물과 오늘의 마음 관리 팁을 만나보세요.</p></div>
+      <div class="feature-meta"><span>약 1분 · 16가지 결과</span><span>시작하기 →</span></div>
+    </a>
+    <a class="feature-card" href="fortune/index.html">
+      <div><div class="feature-icon">🔮</div><h3>오늘의 식물 운세</h3><p>하루에 한 번, 오늘의 식물과 작은 행동 제안을 받아보세요. 매일 자정 새롭게 피어납니다.</p></div>
+      <div class="feature-meta"><span>매일 새로운 결과</span><span>운세 보기 →</span></div>
+    </a>
+    <a class="feature-card" href="name-generator/index.html">
+      <div><div class="feature-icon">🌼</div><h3>나만의 식물 이름</h3><p>감정과 분위기, 마음에 담긴 단어를 조합해 오늘의 나를 위한 식물 이름을 만들어드려요.</p></div>
+      <div class="feature-meta"><span>수백 가지 조합</span><span>이름 만들기 →</span></div>
+    </a>
+    <a class="feature-card" href="compatibility/index.html">
+      <div><div class="feature-icon">💘</div><h3>식물 궁합</h3><p>닉네임과 마음에 드는 식물을 골라 둘 사이의 감성 궁합과 잘 맞는 식물을 확인해보세요.</p></div>
+      <div class="feature-meta"><span>16가지 식물</span><span>궁합 보기 →</span></div>
+    </a>
+  </div>
+</section>
+
+<section class="section compact">
+  <div class="daily-card">
+    <div><p id="todayLabel">오늘의 정원</p><h2 id="dailyTitle">오늘은 어떤 식물이 기다릴까요?</h2><p id="dailyMessage">하루에 하나씩 달라지는 작은 메시지를 확인해보세요.</p></div>
+    <a class="primary-button" href="fortune/result.html">오늘의 운세 열기</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-heading"><div><span class="eyebrow">Why EmoSeed</span><h2>결과보다 중요한 건<br>나를 바라보는 잠깐의 시간</h2></div></div>
+  <div class="info-grid">
+    <article class="info-card"><h3>🪴 부담 없이</h3><p>로그인이나 긴 설문 없이, 휴대폰에서 가볍게 시작할 수 있어요.</p></article>
+    <article class="info-card"><h3>💭 조금 더 다정하게</h3><p>유형을 단정하기보다 강점과 지친 모습, 오늘의 돌봄 방법을 함께 전해요.</p></article>
+    <article class="info-card"><h3>📷 오래 간직하게</h3><p>결과를 세로형 이미지로 저장해 스토리와 메시지로 나눌 수 있어요.</p></article>
+    <article class="info-card"><h3>🔒 개인정보는 가볍게</h3><p>테스트는 브라우저에서 처리하며 회원가입이나 서버 전송을 요구하지 않아요.</p></article>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const plant = window.EmoSeed.dailyPlant();
+    const today = new Date();
+    document.getElementById('todayLabel').textContent = `${today.getMonth() + 1}월 ${today.getDate()}일의 정원`;
+    document.getElementById('dailyTitle').textContent = `오늘의 식물은 ${plant.name}`;
+    document.getElementById('dailyMessage').textContent = plant.quote;
+  });
+</script>
+  </main>
+  <div id="site-footer"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 </body>
 </html>

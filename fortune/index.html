@@ -1,4 +1,65 @@
-<!DOCTYPE html>
-<html lang="ko"><head><meta charset="UTF-8"><link rel="icon" href="../assets/images/favicon.svg" type="image/svg+xml"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EmoSeed Fortune | 감성을 심는 브랜드</title><meta name="description" content="하루에 한 번, 식물로 받는 작고 감성적인 힐링 메시지."><link rel="stylesheet" href="../assets/css/style.css"><style>body{transition:background-color .3s,color .3s}nav{text-align:center;margin-bottom:1.5rem;line-height:1.8}nav a{margin:0 .7rem;text-decoration:none;color:inherit;font-weight:500}nav a.active{text-decoration:underline;font-weight:700}.theme-mint{background:#e6fff3;color:#2a4d3f}.theme-beige{background:#fff6e0;color:#5e4c2a}.theme-lavender{background:#f3edff;color:#453e57}.theme-pink{background:#fff0f0;color:#5a3a3a}.theme-sky{background:#e5f4ff;color:#2c5572}.theme-status{text-align:center;margin-top:3rem}.theme-link{cursor:pointer;font-weight:500;margin:0 .2rem}.share-box{text-align:center;margin:4rem 1rem 3rem}.share-buttons{display:flex;justify-content:center;flex-wrap:wrap;gap:1rem}</style></head><body><div class="wrapper"><main class="content"><nav><div><a href="../index.html">🏠 메인</a><a href="../location.html">📍 Contact</a><a href="../event.html">🎉 Programs</a></div><div><a href="../mbti/index.html">🌱 EmoSeed Type</a><a href="../compatibility/index.html">💘 EmoSeed Match</a><a href="../name-generator/index.html">🌼 EmoSeed Name</a><a href="index.html" class="active">🔮 EmoSeed Fortune</a></div></nav>
-<section class="header-message" style="text-align:center;padding:2rem 1rem"><h1>🌿 EmoSeed Fortune</h1><p>하루에 한 번, 식물로 받는 작고 감성적인 힐링 메시지</p><button onclick="goToResult()" style="margin-top:2rem">🔮 오늘의 운세 보기</button></section><hr style="margin:3rem auto;width:80%;border:none;border-top:1px solid #ccc"><div style="display:flex;flex-direction:column;align-items:center"><p><b>다른 프로그램도 체험해보세요 🌿</b></p><button onclick="location.href='../index.html'">🏠 메인 페이지로 가기</button><button onclick="goTo('mbti')">🌿 EmoSeed Type</button><button onclick="goTo('compatibility')">🌿 EmoSeed Match</button><button onclick="goTo('name-generator')">🌿 EmoSeed Name</button></div><div class="theme-status" id="themeStatus"></div><div class="share-box"><p><b>이 감성 페이지, 친구에게도 공유해보세요 🌿</b></p><div class="share-buttons"><button onclick="copyLink()">🔗 링크 복사</button><button onclick="shareEmail()">📧 이메일 공유</button></div></div><div id="footer-placeholder"></div>
-<script>const plants=['무궁화','라벤더','민트','스투키','수국','선인장','알로에','대나무','해바라기','장미','페퍼민트','튤립','코스모스','장미허브','카네이션','유칼립투스'];function goToResult(){const d=new Date(),seed=Number(`${d.getFullYear()}${d.getMonth()+1}${d.getDate()}`);location.href=`result.html?plant=${encodeURIComponent(plants[seed%plants.length])}`}function goTo(f){location.href=`../${f}/index.html`}const themes={mint:'🌿 민트',beige:'☕ 베이지',lavender:'💜 연보라',pink:'🍑 살구핑크',sky:'💧 하늘블루'};function applyTheme(t){document.body.className='loaded theme-'+t;localStorage.setItem('theme',t);document.getElementById('themeStatus').innerHTML=`${themes[t]} <b>테마</b>를 사용 중입니다.<br>`+Object.entries(themes).filter(([k])=>k!==t).map(([k,v])=>`<span class="theme-link" onclick="applyTheme('${k}')">${v}</span>`).join(', ')}function copyLink(){navigator.clipboard.writeText(location.href).then(()=>alert('📋 링크가 복사되었습니다!'))}function shareEmail(){location.href=`mailto:?subject=${encodeURIComponent('🌿 EmoSeed Fortune')}&body=${encodeURIComponent(location.href)}`}addEventListener('load',()=>applyTheme(localStorage.getItem('theme')||'mint'));fetch('../footer.html').then(r=>r.text()).then(x=>document.getElementById('footer-placeholder').innerHTML=x)</script></main></div></body></html>
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>오늘의 식물 운세 | EmoSeed</title>
+  <meta name="description" content="하루에 한 번, 오늘의 식물과 감성 메시지, 작은 행동 제안을 받아보세요.">
+  <meta name="theme-color" content="#f6fbf6">
+  <meta name="color-scheme" content="light">
+  <link rel="canonical" href="https://emoseed.lavalabs.co.kr/fortune/">
+  <link rel="icon" href="../assets/images/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../assets/images/favicon.svg">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="EmoSeed">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:title" content="오늘의 식물 운세 | EmoSeed">
+  <meta property="og:description" content="하루에 한 번, 오늘의 식물과 감성 메시지, 작은 행동 제안을 받아보세요.">
+  <meta property="og:url" content="https://emoseed.lavalabs.co.kr/fortune/">
+  <meta property="og:image" content="https://emoseed.lavalabs.co.kr/assets/images/og-image.svg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="오늘의 식물 운세 | EmoSeed">
+  <meta name="twitter:description" content="하루에 한 번, 오늘의 식물과 감성 메시지, 작은 행동 제안을 받아보세요.">
+  <meta name="twitter:image" content="https://emoseed.lavalabs.co.kr/assets/images/og-image.svg">
+  <script defer src="../assets/js/data.js"></script>
+  <script defer src="../assets/js/app.js"></script>
+</head>
+<body data-base="../" data-page="fortune">
+  <div id="site-header"></div>
+  <main id="main-content" class="page-shell">
+<section class="page-hero">
+  <span class="eyebrow">🔮 EmoSeed Fortune</span>
+  <h1>오늘의 마음에는<br>어떤 식물이 피어날까요?</h1>
+  <p>하루에 하나의 식물이 당신을 기다립니다. 같은 날에는 같은 결과가 유지되고, 다음 날 자정에 새로운 운세가 피어나요.</p>
+</section>
+<section class="narrow content-card" style="text-align:center">
+  <div style="width:min(100%,320px);margin:0 auto 24px;border-radius:28px;overflow:hidden;background:var(--surface-soft)"><img id="previewImage" src="../assets/images/infj.svg" alt="오늘의 식물 미리보기" style="aspect-ratio:4/5;object-fit:cover;filter:blur(14px) saturate(.6);transform:scale(1.08)"></div>
+  <h2 id="fortuneDate">오늘의 운세가 준비됐어요</h2>
+  <p style="color:var(--muted)">오늘의 식물, 마음의 온도, 행운의 색과 작은 행동을 확인해보세요.</p>
+  <div class="button-row" style="justify-content:center"><a class="primary-button" href="result.html">🔮 오늘의 운세 열기</a></div>
+  <p id="nextFortune" style="margin-top:18px;color:var(--muted);font-size:13px"></p>
+</section>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const now = new Date();
+    document.getElementById('fortuneDate').textContent = `${now.getMonth() + 1}월 ${now.getDate()}일의 운세가 준비됐어요`;
+    function updateCountdown() {
+      const current = new Date();
+      const next = new Date(current); next.setHours(24, 0, 0, 0);
+      const diff = next - current;
+      const hours = Math.floor(diff / 3600000);
+      const minutes = Math.floor((diff % 3600000) / 60000);
+      document.getElementById('nextFortune').textContent = `새 운세까지 ${hours}시간 ${minutes}분`;
+    }
+    updateCountdown(); setInterval(updateCountdown, 60000);
+  });
+</script>
+  </main>
+  <div id="site-footer"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

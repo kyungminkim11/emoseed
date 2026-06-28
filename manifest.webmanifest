@@ -1,0 +1,14 @@
+{
+  "name": "EmoSeed — 작은 디지털 정원",
+  "short_name": "EmoSeed",
+  "description": "매일 마음을 식물처럼 천천히 들여다보는 작은 디지털 정원",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f6fbf6",
+  "theme_color": "#2f6f50",
+  "lang": "ko-KR",
+  "icons": [
+    { "src": "/assets/images/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

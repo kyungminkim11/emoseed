@@ -1,7 +1,107 @@
-<!DOCTYPE html>
-<html lang="ko"><head><meta charset="UTF-8"><link rel="icon" href="../assets/images/favicon.svg" type="image/svg+xml"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EmoSeed Match 결과</title><link rel="stylesheet" href="../assets/css/style.css"><style>body{transition:background-color .3s,color .3s}nav{text-align:center;margin-bottom:1.5rem;line-height:1.8}nav a{margin:0 .7rem;text-decoration:none;color:inherit;font-weight:500}nav a.active{text-decoration:underline;font-weight:700}.theme-mint{background:#e6fff3;color:#2a4d3f}.theme-beige{background:#fff6e0;color:#5e4c2a}.theme-lavender{background:#f3edff;color:#453e57}.theme-pink{background:#fff0f0;color:#5a3a3a}.theme-sky{background:#e5f4ff;color:#2c5572}.theme-status{text-align:center;margin-top:3rem}.theme-link{cursor:pointer;font-weight:500;margin:0 .2rem}</style></head><body><div class="wrapper"><main class="content"><nav><div><a href="../index.html">🏠 메인</a><a href="../location.html">📍 Contact</a><a href="../event.html">🎉 Programs</a></div><div><a href="../mbti/index.html">🌱 EmoSeed Type</a><a href="index.html" class="active">💘 EmoSeed Match</a><a href="../name-generator/index.html">🌼 EmoSeed Name</a><a href="../fortune/index.html">🔮 EmoSeed Fortune</a></div></nav>
-<section id="capture-area" style="padding:2rem 1rem;text-align:center"><h1>💘 식물 궁합 테스트 결과</h1><p id="mainResult" style="font-size:1.5rem"></p><p id="resultMessage" style="color:#555"></p><img id="plantImage" alt="선택한 식물" style="margin:1.5rem auto 0;max-width:250px;height:auto;object-fit:contain;border-radius:12px;display:block"><p style="margin-top:2rem;font-weight:bold">💡 가장 궁합이 좋은 식물</p><p id="bestMatch" style="font-size:1.2rem"></p></section>
-<div style="text-align:center;margin-top:2rem"><button onclick="saveResult()">📋 결과 저장하기</button><button onclick="copyLink()">🔗 링크 복사하기</button><button onclick="shareByEmail()">📧 이메일로 공유하기</button><button onclick="location.href='index.html'">↩️ 다시 테스트하기</button></div><hr style="margin:3rem auto;width:80%;border:none;border-top:1px solid #ccc"><div style="display:flex;flex-direction:column;align-items:center"><p><b>다른 프로그램도 체험해보세요 🌿</b></p><button onclick="location.href='../index.html'">🏠 메인 페이지로 가기</button><button onclick="goTo('mbti')">🌿 EmoSeed Type</button><button onclick="goTo('name-generator')">🌿 EmoSeed Name</button><button onclick="goTo('fortune')">🌿 EmoSeed Fortune</button></div><div class="theme-status" id="themeStatus"></div><div id="footer-placeholder"></div>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script><script>
-const map={무궁화:'INFP',라벤더:'INFJ',민트:'INTP',스투키:'INTJ',수국:'ISFP',선인장:'ISTP',알로에:'ISFJ',대나무:'ISTJ',해바라기:'ENFP',장미:'ENFJ',페퍼민트:'ENTP',튤립:'ENTJ',코스모스:'ESFP',장미허브:'ESTP',카네이션:'ESFJ',유칼립투스:'ESTJ'},q=new URLSearchParams(location.search),userName=q.get('name')||'사용자',selectedPlant=q.get('plant')||'무궁화';function score(a,b){return[...(a+b)].reduce((s,c)=>s+c.charCodeAt(0),0)%101}function message(s){return s>=90?'이보다 더 좋을 수 없는 찰떡 궁합이에요! 💘':s>=70?'서로가 서로를 잘 이해하는 따뜻한 조합이에요 🌿':s>=50?'조금 다르지만, 그 차이가 매력이 될 수 있어요.':s>=30?'서로를 알아가기 위해 노력이 필요해요.':'아직은 어색하지만, 함께하면 새로운 매력을 발견할 수 있어요!'}const userScore=score(userName,selectedPlant);let bestPlant='',bestScore=-1;Object.keys(map).forEach(p=>{const s=score(userName,p);if(s>bestScore){bestScore=s;bestPlant=p}});document.getElementById('plantImage').src=`../assets/images/${(map[selectedPlant]||'INFP').toLowerCase()}.svg`;document.getElementById('mainResult').textContent=`${userName} 님과 ${selectedPlant}의 궁합은 ${userScore}점이에요!`;document.getElementById('resultMessage').textContent=message(userScore);document.getElementById('bestMatch').textContent=`${bestPlant} (${bestScore}점)`;function saveResult(){html2canvas(document.getElementById('capture-area')).then(c=>{const a=document.createElement('a');a.download=`식물궁합_${userName}_${selectedPlant}_${userScore}점.png`;a.href=c.toDataURL('image/png');a.click()})}function copyLink(){navigator.clipboard.writeText(location.href).then(()=>alert('📋 링크가 복사되었습니다!'))}function shareByEmail(){location.href=`mailto:?subject=${encodeURIComponent('🌿 '+userName+'님의 식물 궁합 결과')}&body=${encodeURIComponent(`${selectedPlant}와 ${userScore}점 궁합이에요!\n\n${message(userScore)}\n\n${location.href}`)}`}function goTo(f){location.href=`../${f}/index.html`}const themes={mint:'🌿 민트',beige:'☕ 베이지',lavender:'💜 연보라',pink:'🍑 살구핑크',sky:'💧 하늘블루'};function applyTheme(t){document.body.className='loaded theme-'+t;localStorage.setItem('theme',t);document.getElementById('themeStatus').innerHTML=`${themes[t]} <b>테마</b>를 사용 중입니다.<br>`+Object.entries(themes).filter(([k])=>k!==t).map(([k,v])=>`<span class="theme-link" onclick="applyTheme('${k}')">${v}</span>`).join(', ')}addEventListener('load',()=>applyTheme(localStorage.getItem('theme')||'mint'));fetch('../footer.html').then(r=>r.text()).then(x=>document.getElementById('footer-placeholder').innerHTML=x)
-</script></main></div></body></html>
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>식물 궁합 결과 | EmoSeed</title>
+  <meta name="description" content="선택한 식물과 나의 감성 궁합 점수, 관계의 특징과 가장 잘 맞는 식물을 확인해보세요.">
+  <meta name="theme-color" content="#f6fbf6">
+  <meta name="robots" content="noindex,follow">
+  <meta name="color-scheme" content="light">
+  <link rel="canonical" href="https://emoseed.lavalabs.co.kr/compatibility/result.html">
+  <link rel="icon" href="../assets/images/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../assets/images/favicon.svg">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="EmoSeed">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:title" content="식물 궁합 결과 | EmoSeed">
+  <meta property="og:description" content="선택한 식물과 나의 감성 궁합 점수, 관계의 특징과 가장 잘 맞는 식물을 확인해보세요.">
+  <meta property="og:url" content="https://emoseed.lavalabs.co.kr/compatibility/result.html">
+  <meta property="og:image" content="https://emoseed.lavalabs.co.kr/assets/images/og-image.svg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="식물 궁합 결과 | EmoSeed">
+  <meta name="twitter:description" content="선택한 식물과 나의 감성 궁합 점수, 관계의 특징과 가장 잘 맞는 식물을 확인해보세요.">
+  <meta name="twitter:image" content="https://emoseed.lavalabs.co.kr/assets/images/og-image.svg">
+  <script defer src="../assets/js/data.js"></script>
+  <script defer src="../assets/js/app.js"></script>
+</head>
+<body data-base="../" data-page="match">
+  <div id="site-header"></div>
+  <main id="main-content" class="page-shell">
+<section class="page-hero compact"><span class="eyebrow">💘 EmoSeed Match Result</span><h1>우리 사이에<br>작은 잎이 피었어요</h1></section>
+<section class="result-shell">
+  <article class="result-card">
+    <div class="result-header">
+      <div>
+        <div class="result-kicker">PLANT COMPATIBILITY</div>
+        <h2 class="result-title" id="scoreTitle"></h2>
+        <p class="result-subtitle" id="scoreSubtitle"></p>
+        <div class="keyword-list" id="scoreKeywords"></div>
+      </div>
+      <img class="result-image" id="plantImage" alt="">
+    </div>
+    <div class="detail-grid">
+      <section class="detail-card"><h3>💞 관계의 온도</h3><p id="temperature"></p></section>
+      <section class="detail-card"><h3>🌿 잘 맞는 순간</h3><p id="goodMoment"></p></section>
+      <section class="detail-card"><h3>🫧 기억할 점</h3><p id="advice"></p></section>
+      <section class="detail-card"><h3>✨ 최고의 식물 친구</h3><p id="bestMatch"></p></section>
+    </div>
+    <div class="quote-card" id="scoreQuote"></div>
+  </article>
+  <div class="share-panel"><p>닉네임은 공유 주소에 포함되지 않아요. 결과 이미지만 편하게 나눠보세요.</p><div class="button-row">
+    <button class="primary-button" id="saveResult" type="button">📷 이미지 저장</button>
+    <button class="secondary-button" id="shareResult" type="button">공유하기</button>
+    <button class="secondary-button" data-copy-link type="button">링크 복사</button>
+    <a class="text-button" href="index.html">다시 해보기</a>
+  </div></div>
+  <div class="related-grid">
+    <a class="related-card" href="../mbti/index.html"><strong>🌱 나와 닮은 식물</strong><span>8문항 성향 테스트</span></a>
+    <a class="related-card" href="../fortune/index.html"><strong>🔮 오늘의 운세</strong><span>오늘의 식물 메시지</span></a>
+    <a class="related-card" href="../name-generator/index.html"><strong>🌼 식물 이름</strong><span>감정으로 만드는 이름</span></a>
+  </div>
+</section>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(location.search);
+    const plant = window.EmoSeed.plantByName(params.get('plant')) || window.EMOSEED_DATA.plants[0];
+    const rawScore = Number(params.get('score'));
+    const score = Number.isFinite(rawScore) ? Math.max(0, Math.min(100, rawScore)) : 72;
+    const nickname = sessionStorage.getItem('emoseed-match-name') || 'EmoSeed 친구';
+    const best = window.EMOSEED_DATA.plants
+      .filter((item) => item.name !== plant.name)
+      .map((item) => ({ ...item, score: window.EmoSeed.hash(`${nickname}|${item.name}`) % 101 }))
+      .sort((a, b) => b.score - a.score)[0];
+    const bands = score >= 85
+      ? ['서로의 결을 자연스럽게 알아보는 찰떡 조합이에요.', ['찰떡', '편안함', '성장'], '함께 새로운 일을 시작할 때 서로의 장점이 크게 살아나요.', '가까운 만큼 각자의 시간도 존중하면 오래 편안해요.', '서로의 다른 계절까지 사랑할 수 있는 궁합이에요.']
+      : score >= 65
+      ? ['다른 점이 서로를 부드럽게 채워주는 따뜻한 조합이에요.', ['균형', '호기심', '온기'], '차분한 대화나 함께 걷는 시간에서 좋은 리듬이 생겨요.', '상대가 나와 같을 거라고 미리 단정하지 않는 것이 중요해요.', '조금 다른 잎이 모여 더 풍성한 정원이 돼요.']
+      : score >= 40
+      ? ['천천히 알아갈수록 새로운 매력을 발견하는 조합이에요.', ['발견', '차이', '가능성'], '공통 취향을 하나씩 만들어갈 때 관계가 가까워져요.', '속도와 표현 방식의 차이를 틀림으로 받아들이지 마세요.', '낯선 향도 곁에 오래 머물면 특별한 기억이 돼요.']
+      : ['서로 다른 환경에서 자란 만큼 섬세한 돌봄이 필요한 조합이에요.', ['도전', '배움', '여유'], '기대보다 솔직한 설명과 구체적인 약속이 도움이 돼요.', '억지로 맞추기보다 편안한 거리를 함께 찾아보세요.', '모든 식물이 같은 화분에서 자랄 필요는 없어요.'];
+    const imageSrc = `../assets/images/${plant.type.toLowerCase()}.svg`;
+    document.getElementById('scoreTitle').textContent = `${score}점`;
+    document.getElementById('scoreSubtitle').textContent = `${nickname} 님과 ${plant.name}의 감성 궁합 · ${bands[0]}`;
+    document.getElementById('scoreKeywords').innerHTML = bands[1].map((item) => `<span class="keyword">${item}</span>`).join('');
+    document.getElementById('temperature').textContent = score >= 85 ? '햇살이 따뜻한 봄날처럼 자연스럽고 안정적인 온도예요.' : score >= 65 ? '따뜻한 차 한 잔처럼 천천히 편안해지는 온도예요.' : score >= 40 ? '서로의 온도를 맞춰가는 초여름 저녁 같은 관계예요.' : '각자의 온도를 존중하며 천천히 거리를 조절해야 해요.';
+    document.getElementById('goodMoment').textContent = bands[2];
+    document.getElementById('advice').textContent = bands[3];
+    document.getElementById('bestMatch').textContent = `${best.name} · ${best.score}점 — ${best.tagline}`;
+    document.getElementById('scoreQuote').textContent = `“${bands[4]}”`;
+    const image = document.getElementById('plantImage'); image.src = imageSrc; image.alt = `${plant.name} 일러스트`;
+    document.getElementById('saveResult').addEventListener('click', () => window.EmoSeedApp.downloadResultImage({
+      kicker: 'EMOSEED MATCH', title: `${plant.name} × ${score}점`, subtitle: `${nickname} 님의 식물 궁합`, keywords: bands[1], message: bands[0], quote: bands[4], imageSrc,
+      filename: `EmoSeed_식물궁합_${plant.name}_${score}점.png`
+    }));
+    document.getElementById('shareResult').addEventListener('click', () => window.EmoSeedApp.shareResultImage({ kicker: 'EMOSEED MATCH', title: `${plant.name} × ${score}점`, subtitle: `${nickname} 님의 식물 궁합`, keywords: bands[1], message: bands[0], quote: bands[4], imageSrc, filename: `EmoSeed_식물궁합_${plant.name}_${score}점.png` }, { title: `${plant.name}와의 식물 궁합 ${score}점`, text: bands[0], url: location.href }));
+    window.EmoSeedApp.track('result_view', { test: 'match', plant: plant.name, score });
+  });
+</script>
+  </main>
+  <div id="site-footer"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
