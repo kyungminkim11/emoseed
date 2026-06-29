@@ -35,6 +35,7 @@
             ${navLink('name', 'name-generator/index.html', '식물 이름')}
             ${navLink('match', 'compatibility/index.html', '식물 궁합')}
             ${navLink('flowers', 'flowers/index.html', '꽃 도감')}
+            ${navLink('gifts', 'flowers/gifts.html', '꽃 선물')}
             ${navLink('programs', 'event.html', '프로그램')}
             ${navLink('contact', 'location.html', '소개·문의')}
           </nav>
@@ -58,6 +59,7 @@
             ${navLink('name', 'name-generator/index.html', '<span>🌼 나만의 식물 이름</span><span>›</span>')}
             ${navLink('match', 'compatibility/index.html', '<span>💘 식물 궁합</span><span>›</span>')}
             ${navLink('flowers', 'flowers/index.html', '<span>🌸 꽃 도감·추천</span><span>›</span>')}
+            ${navLink('gifts', 'flowers/gifts.html', '<span>💐 꽃 선물 캘린더</span><span>›</span>')}
             ${navLink('programs', 'event.html', '<span>🎉 프로그램</span><span>›</span>')}
             ${navLink('contact', 'location.html', '<span>💬 소개·문의</span><span>›</span>')}
           </nav>
@@ -83,6 +85,7 @@
           </div>
           <nav class="footer-links" aria-label="하단 메뉴">
             <a href="${path('flowers/index.html')}">꽃 도감</a>
+            <a href="${path('flowers/gifts.html')}">꽃 선물</a>
             <a href="${path('location.html')}">소개·문의</a>
             <a href="${path('privacy.html')}">개인정보 안내</a>
             <a href="https://lavalabs.co.kr" target="_blank" rel="noopener">LAVALABS ↗</a>
