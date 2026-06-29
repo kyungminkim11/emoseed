@@ -22,6 +22,7 @@
   function eventDate(event, year) {
     if (event.rule === 'second-sunday-may') return nthWeekday(year, 4, 0, 2);
     if (event.rule === 'third-monday-may') return nthWeekday(year, 4, 1, 3);
+    if (event.rule === 'third-sunday-june') return nthWeekday(year, 5, 0, 3);
     return new Date(year, event.month - 1, event.day);
   }
 
