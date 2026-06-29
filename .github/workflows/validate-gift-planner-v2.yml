@@ -1,0 +1,45 @@
+name: Validate advanced gift planner
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/validate-gift-planner-v2.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate JavaScript and page connections
+        run: |
+          node --check flowers/gifts.js
+          node --check flowers/gifts-data.js
+          node --check flowers/gifts-plus.js
+          grep -q 'gifts-plus.css' flowers/gifts.html
+          grep -q 'gifts-plus.js' flowers/gifts.html
+          grep -q "third-sunday-june" flowers/gifts.js
+          grep -q "gift-dashboard" flowers/gifts-plus.js
+          grep -q "recipient-profiles" flowers/gifts-plus.js
+          grep -q "saved-plans" flowers/gifts-plus.js
+      - name: Cache v2 assets
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('service-worker.js')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace("const CACHE = 'emoseed-flower-gifts-20260630';", "const CACHE = 'emoseed-gift-planner-v2-20260630';")
+          s=s.replace("'/flowers/gifts-data.js', '/flowers/gifts.js',", "'/flowers/gifts-data.js', '/flowers/gifts.js', '/flowers/gifts-plus.css', '/flowers/gifts-plus.js',")
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit cache update and remove workflow
+        run: |
+          rm -f .github/workflows/validate-gift-planner-v2.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Validate and cache flower gift planner v2' || exit 0
+          git push
