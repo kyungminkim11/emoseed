@@ -1,0 +1,45 @@
+name: Enable advanced flower gift planner
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/enable-gift-planner-v2.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  enable:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Connect advanced planner assets and rules
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p=Path('flowers/gifts.html')
+          s=p.read_text(encoding='utf-8')
+          if 'gifts-plus.css' not in s:
+              s=s.replace('<link rel="stylesheet" href="gifts.css">','<link rel="stylesheet" href="gifts.css">\n  <link rel="stylesheet" href="gifts-plus.css">')
+          if 'gifts-plus.js' not in s:
+              s=s.replace('<script defer src="gifts.js"></script>','<script defer src="gifts.js"></script>\n  <script defer src="gifts-plus.js"></script>')
+          old='<option value="self">나를 위한 꽃</option>'
+          new='<option value="self">나를 위한 꽃</option><option value="promotion">승진·합격</option><option value="opening">개업·오픈</option><option value="retirement">퇴직·은퇴</option><option value="recovery">병문안·회복</option><option value="performance">공연·전시</option>'
+          s=s.replace(old,new)
+          p.write_text(s,encoding='utf-8')
+
+          p=Path('flowers/gifts.js')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace("if (event.rule === 'third-monday-may') return nthWeekday(year, 4, 1, 3);", "if (event.rule === 'third-monday-may') return nthWeekday(year, 4, 1, 3);\n    if (event.rule === 'third-sunday-june') return nthWeekday(year, 5, 0, 3);")
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit and remove workflow
+        run: |
+          rm -f .github/workflows/enable-gift-planner-v2.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Enable advanced flower gift planner' || exit 0
+          git push
