@@ -1,4 +1,4 @@
-const CACHE = 'emoseed-gift-planner-v2-20260630';
+const CACHE = 'emoseed-gift-planner-v2-fixed-20260630';
 const CORE = [
   '/', '/index.html', '/offline.html', '/assets/css/style.css', '/assets/js/app.js', '/assets/js/data.js',
   '/assets/images/favicon.svg',

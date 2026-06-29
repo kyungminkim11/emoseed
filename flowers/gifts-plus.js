@@ -189,7 +189,8 @@
     if(pet==='cat')petText='고양이와 함께 사는 집이므로 백합속·원추리속 꽃과 꽃가루 위험 소재는 완전히 제외하고, 고양이 안전성을 확인한 꽃으로 구성해주세요.';
     else if(pet==='dog')petText='강아지와 함께 사는 집이므로 반려견에게 안전한지 확인한 꽃으로 구성해주세요.';
     else if(pet==='other')petText='반려동물이 있는 집이므로 동물 종류별 안전성을 확인한 꽃으로 구성해주세요.';
-    target.textContent=`${base}${marker}선물 형태는 ${style}, 전달 방식은 ${delivery}입니다. ${seasonal} ${petText}`.trim();
+    const nextText=`${base}${marker}선물 형태는 ${style}, 전달 방식은 ${delivery}입니다. ${seasonal} ${petText}`.trim();
+    if(target.textContent!==nextText) target.textContent=nextText;
   }
 
   function renderSafety(){const value=document.getElementById('petSafety')?.value;const target=document.getElementById('petSafetyNote');if(!target)return;target.classList.toggle('danger',value==='cat');if(value==='cat')target.textContent='고양이가 있는 집: 백합속(Lilium)과 원추리속(Hemerocallis)은 꽃가루와 꽃병 물까지 위험할 수 있어 완전히 제외하도록 꽃집에 반드시 알려주세요.';else if(value==='dog')target.textContent='강아지가 있는 집: 꽃과 잎을 씹을 수 있으므로 동물 안전성을 꽃집에 확인하고, 전달 후 손이 닿지 않는 곳에 두도록 안내하세요.';else if(value==='other')target.textContent='기타 반려동물이 있는 집: 동물 종류를 꽃집에 정확히 알려 안전성을 확인한 뒤 구성하세요.';else target.textContent='받는 사람의 향 민감도와 반려동물 여부를 확인하면 더 안전한 선물이 됩니다.';}
