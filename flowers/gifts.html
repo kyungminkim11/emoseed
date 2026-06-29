@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>꽃 선물 캘린더·꽃다발 추천 | EmoSeed</title>
+  <meta name="description" content="다가오는 꽃 선물 기념일을 확인하고 예산·상황·받는 사람에 맞는 꽃다발과 꽃집 주문 문구를 만들어보세요.">
+  <meta name="theme-color" content="#f6fbf6">
+  <link rel="canonical" href="https://emoseed.lavalabs.co.kr/flowers/gifts.html">
+  <link rel="icon" href="../assets/images/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="gifts.css">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="EmoSeed">
+  <meta property="og:title" content="꽃 선물 캘린더·꽃다발 추천 | EmoSeed">
+  <meta property="og:description" content="기념일 D-day부터 꽃다발 조합, 꽃집 주문 문구, 개인 기념일 저장까지.">
+  <meta property="og:url" content="https://emoseed.lavalabs.co.kr/flowers/gifts.html">
+  <meta property="og:image" content="https://emoseed.lavalabs.co.kr/assets/images/og-image.svg">
+  <script defer src="../assets/js/data.js"></script>
+  <script defer src="../assets/js/app.js"></script>
+  <script defer src="gifts-data.js"></script>
+  <script defer src="gifts.js"></script>
+</head>
+<body data-base="../" data-page="flowers">
+  <div id="site-header"></div>
+  <main id="main-content" class="page-shell">
+    <section class="gift-hero">
+      <div>
+        <span class="eyebrow">💐 EmoSeed Flower Gift</span>
+        <h1>꽃을 건네기 좋은 날을<br><span class="accent">놓치지 않도록</span></h1>
+        <p>다가오는 공식·국제·대중문화 기념일을 한눈에 보고, 받는 사람과 예산에 맞는 꽃다발을 추천받아보세요. 생일과 첫 만남 같은 개인 기념일도 이 기기에 저장할 수 있어요.</p>
+        <div class="hero-actions">
+          <a class="primary-button" href="#upcoming">다가오는 기념일</a>
+          <a class="secondary-button" href="#bouquet-builder">꽃다발 추천받기</a>
+          <a class="secondary-button" href="index.html">🌸 꽃 도감</a>
+        </div>
+      </div>
+      <article class="next-gift-card">
+        <span class="eyebrow">Next Flower Day</span>
+        <div class="countdown" id="nextCountdown">D-</div>
+        <h2 id="nextTitle">다가오는 날을 찾는 중</h2>
+        <p id="nextDate"></p>
+        <p id="nextFlowers" style="margin-top:12px;font-weight:850;color:#245b41"></p>
+      </article>
+    </section>
+
+    <section class="gift-section" id="upcoming">
+      <div class="gift-section-head">
+        <div><span class="eyebrow">Coming Soon</span><h2>다가오는 꽃 선물 기념일</h2></div>
+        <p>오늘을 기준으로 가까운 순서대로 보여드려요. ‘캘린더 추가’를 누르면 휴대폰·PC 캘린더에 넣을 수 있는 파일을 저장합니다.</p>
+      </div>
+      <div class="upcoming-grid" id="upcomingGrid"></div>
+    </section>
+
+    <section class="gift-section" id="all-calendar">
+      <div class="gift-section-head">
+        <div><span class="eyebrow">All Flower Days</span><h2>전체 꽃 선물 캘린더</h2></div>
+        <p>법정 기념일과 국제 기념일, 대중문화에서 통용되는 날, 꽃을 선물하기 좋은 계절 시기를 구분했습니다.</p>
+      </div>
+      <div class="gift-panel">
+        <div class="calendar-toolbar">
+          <button class="calendar-chip" type="button" data-calendar-filter="all" aria-pressed="true">전체</button>
+          <button class="calendar-chip" type="button" data-calendar-filter="official" aria-pressed="false">법정 기념일</button>
+          <button class="calendar-chip" type="button" data-calendar-filter="global" aria-pressed="false">국제 기념일</button>
+          <button class="calendar-chip" type="button" data-calendar-filter="popular" aria-pressed="false">대중문화 기념일</button>
+          <button class="calendar-chip" type="button" data-calendar-filter="seasonal" aria-pressed="false">추천 시기</button>
+          <button class="calendar-chip" type="button" data-calendar-filter="personal" aria-pressed="false">내 기념일</button>
+        </div>
+        <div class="calendar-list" id="calendarList"></div>
+      </div>
+    </section>
+
+    <section class="gift-section" id="bouquet-builder">
+      <div class="gift-section-head">
+        <div><span class="eyebrow">Bouquet Builder</span><h2>상황별 꽃다발 추천</h2></div>
+        <p>꽃집의 당일 재고와 꽃 상태가 가장 중요하므로, 특정 꽃을 강제하기보다 분위기와 중심 꽃을 전달하는 주문 방식을 추천해요.</p>
+      </div>
+      <div class="builder-layout">
+        <div class="builder-form">
+          <div class="field-grid">
+            <div class="field"><label for="bouquetOccasion">상황</label><select id="bouquetOccasion"><option value="love">고백·데이트</option><option value="anniversary">기념일</option><option value="birthday">생일</option><option value="thanks" selected>감사</option><option value="parents">부모님·어른</option><option value="apology">사과·화해</option><option value="comfort">위로</option><option value="graduation">졸업·새 출발</option><option value="friendship">친구</option><option value="housewarming">집들이</option><option value="self">나를 위한 꽃</option></select></div>
+            <div class="field"><label for="bouquetRecipient">받는 사람</label><select id="bouquetRecipient"><option value="lover">연인</option><option value="parent">부모님·가족</option><option value="teacher">선생님·멘토</option><option value="friend">친구</option><option value="colleague" selected>동료·고객</option><option value="self">나 자신</option></select></div>
+            <div class="field"><label for="bouquetBudget">예산</label><select id="bouquetBudget"><option value="20000">2만원대</option><option value="30000" selected>3만원대</option><option value="50000">5만원대</option><option value="70000">7만원 이상</option></select></div>
+            <div class="field"><label for="bouquetColor">색감</label><select id="bouquetColor"><option value="pastel" selected>파스텔</option><option value="warm">따뜻한 노랑·주황</option><option value="white">화이트·그린</option><option value="purple">보라·블루</option><option value="vivid">선명한 컬러 믹스</option></select></div>
+            <div class="field full"><label for="customEventName">기념일 이름 또는 용도</label><input id="customEventName" type="text" placeholder="예: 100일, 개업 축하, 승진 축하"></div>
+            <div class="field full"><label><input id="bouquetFragrance" type="checkbox"> 향이 강한 꽃 제외</label></div>
+          </div>
+        </div>
+        <div class="builder-result">
+          <div class="bouquet-preview">
+            <span class="eyebrow">Recommended Bouquet</span>
+            <h3 id="bouquetTitle">부드러운 감사 꽃다발</h3>
+            <p id="bouquetMeaning"></p>
+            <div class="flower-combo" id="bouquetFlowers"></div>
+          </div>
+          <div class="order-copy"><strong>꽃집에 그대로 보여줄 주문 문구</strong><span id="orderText"></span><div class="result-actions"><button class="small-action" id="copyOrder" type="button">문구 복사</button><button class="small-action" id="findFlowerShop" type="button">가까운 꽃집 찾기</button></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="gift-section" id="personal-dates">
+      <div class="gift-section-head">
+        <div><span class="eyebrow">My Special Days</span><h2>내 기념일 저장</h2></div>
+        <p>생일, 첫 만남, 결혼기념일, 부모님 생신처럼 개인적인 날을 저장하세요. 정보는 서버가 아닌 현재 브라우저에만 보관됩니다.</p>
+      </div>
+      <div class="personal-layout">
+        <form class="gift-panel" id="personalForm">
+          <div class="field-grid">
+            <div class="field full"><label for="personalTitle">기념일 이름</label><input id="personalTitle" name="title" required placeholder="예: 우리 1주년"></div>
+            <div class="field"><label for="personalDate">날짜</label><input id="personalDate" name="date" type="date" required></div>
+            <div class="field"><label for="personalRecipient">받는 사람</label><input id="personalRecipient" name="recipient" placeholder="예: 서영"></div>
+            <div class="field full"><label for="personalNote">메모</label><textarea id="personalNote" name="note" placeholder="좋아하는 색, 피해야 할 꽃, 준비할 것"></textarea></div>
+            <div class="field full"><label for="personalMessage">미리 적어둘 카드 문구</label><textarea id="personalMessage" name="message" placeholder="그날 전하고 싶은 말"></textarea></div>
+            <div class="field full"><label><input id="personalRepeat" name="repeat" type="checkbox" checked> 매년 반복</label></div>
+          </div>
+          <button class="primary-button" type="submit" style="margin-top:16px">기념일 저장</button>
+        </form>
+        <div class="gift-panel"><div class="personal-list" id="personalList"></div></div>
+      </div>
+    </section>
+
+    <section class="gift-section">
+      <div class="gift-section-head"><div><span class="eyebrow">Useful Tips</span><h2>꽃 선물을 더 잘 준비하는 법</h2></div></div>
+      <div class="tip-grid">
+        <article class="tip-card"><h3>📅 3~7일 전 예약</h3><p>어버이날·졸업식·밸런타인데이처럼 수요가 몰리는 날은 원하는 색과 꽃을 위해 미리 예약하는 편이 좋아요.</p></article>
+        <article class="tip-card"><h3>💰 예산을 먼저 말하기</h3><p>“3만원대, 파스텔, 감사 선물”처럼 예산과 분위기를 먼저 전하면 꽃집이 당일 좋은 꽃으로 구성하기 쉬워요.</p></article>
+        <article class="tip-card"><h3>🌿 취향과 환경 확인</h3><p>향에 민감한지, 반려동물이 있는지, 꽃병이 있는지 확인하면 더 오래 즐길 수 있는 선물이 됩니다.</p></article>
+        <article class="tip-card"><h3>✉️ 짧은 카드 한 장</h3><p>꽃말만 적기보다 왜 이 사람에게 꽃을 골랐는지 한 문장으로 전하면 훨씬 개인적인 선물이 돼요.</p></article>
+      </div>
+    </section>
+
+    <section class="gift-section">
+      <div class="gift-note"><strong>기념일 구분 안내</strong><br>부모의 날·스승의 날·성년의 날·식목일 등은 대한민국의 법정 기념일 자료를 기준으로 하며, 세계 여성의 날·국제 우정의 날·세계 노인의 날·세계 교사의 날 등은 국제기구의 기념일을 참고했습니다. 밸런타인데이·화이트데이·로즈데이는 법정 기념일이 아닌 대중문화 기념일로 별도 표시합니다. 꽃 선물은 관계와 상황에 맞게 부담 없이 선택해주세요.</div>
+    </section>
+  </main>
+  <div id="site-footer"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
