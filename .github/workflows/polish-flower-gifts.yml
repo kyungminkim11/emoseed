@@ -1,0 +1,49 @@
+name: Polish flower gift calendar
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/polish-flower-gifts.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  polish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply final fixes
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p=Path('flowers/gifts.js')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace("  function savePersonal(event) {", "  function cleanInput(value) { return String(value || '').replace(/[<>]/g, '').trim(); }\n\n  function savePersonal(event) {")
+          s=s.replace("title:String(data.get('title') || '').trim(),", "title:cleanInput(data.get('title')),")
+          s=s.replace("recipient:String(data.get('recipient') || '').trim(),", "recipient:cleanInput(data.get('recipient')),")
+          s=s.replace("note:String(data.get('note') || '').trim(),", "note:cleanInput(data.get('note')),")
+          s=s.replace("message:String(data.get('message') || '').trim(),", "message:cleanInput(data.get('message')),")
+          p.write_text(s,encoding='utf-8')
+
+          p=Path('flowers/gifts-data.js')
+          s=p.read_text(encoding='utf-8').replace("['미모사 대신 노란 튤립','프리지어','거베라']", "['노란 튤립','프리지어','거베라']")
+          p.write_text(s,encoding='utf-8')
+
+          p=Path('event.html')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('href="flowers/index.html#recommend"', 'href="flowers/gifts.html"')
+          s=s.replace('<h3>Flower Recommend</h3><p>감사, 위로, 생일, 새로운 시작과 오늘의 감정에 어울리는 꽃을 추천합니다.</p>', '<h3>Flower Gift</h3><p>다가오는 기념일과 개인 기념일을 확인하고 예산·대상·상황별 꽃다발을 추천합니다.</p>')
+          s=s.replace('<span>꽃집·식물원 찾기</span><span>추천받기 →</span>', '<span>꽃다발·캘린더·꽃집 찾기</span><span>선물 준비하기 →</span>')
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit and remove workflow
+        run: |
+          rm -f .github/workflows/polish-flower-gifts.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Polish flower gift calendar experience' || exit 0
+          git push
