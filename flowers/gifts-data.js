@@ -2,7 +2,7 @@ window.EMOSEED_GIFT_EVENTS=[
 {id:'new-year',title:'새해',type:'seasonal',month:1,day:1,recipient:'가족·동료·나 자신',meaning:'새로운 시작을 응원하기 좋은 날',flowers:['튤립','프리지어','수선화'],message:'새해의 시작이 환하고 다정하게 피어나길 바라요.'},
 {id:'graduation',title:'졸업 시즌',type:'seasonal',month:2,day:1,recipient:'졸업생·후배·친구',meaning:'2월 한 달 동안 졸업과 새로운 출발을 축하하기 좋은 시기',flowers:['프리지어','거베라','해바라기'],message:'지금까지 정말 수고했어요. 새로운 시작도 마음껏 응원할게요.'},
 {id:'valentine',title:'밸런타인데이',type:'popular',month:2,day:14,recipient:'연인·좋아하는 사람',meaning:'사랑과 호감을 표현하는 대중문화 기념일',flowers:['장미','튤립','라넌큘러스'],message:'좋아하는 마음을 오늘은 조금 더 솔직하게 전하고 싶어요.'},
-{id:'womens-day',title:'세계 여성의 날',type:'global',month:3,day:8,recipient:'소중한 여성·동료·가족',meaning:'여성의 권리와 성취를 기리는 국제 기념일',flowers:['미모사 대신 노란 튤립','프리지어','거베라'],message:'당신의 삶과 선택, 그리고 매일의 용기를 응원해요.'},
+{id:'womens-day',title:'세계 여성의 날',type:'global',month:3,day:8,recipient:'소중한 여성·동료·가족',meaning:'여성의 권리와 성취를 기리는 국제 기념일',flowers:['노란 튤립','프리지어','거베라'],message:'당신의 삶과 선택, 그리고 매일의 용기를 응원해요.'},
 {id:'white-day',title:'화이트데이',type:'popular',month:3,day:14,recipient:'연인·좋아하는 사람',meaning:'마음을 답하고 표현하는 대중문화 기념일',flowers:['흰 튤립','리시안셔스','안개꽃'],message:'전하고 싶었던 마음을 오늘은 꽃과 함께 건넬게요.'},
 {id:'arbor-day',title:'식목일',type:'official',month:4,day:5,recipient:'가족·친구·나 자신',meaning:'나무를 심고 자연의 소중함을 생각하는 법정 기념일',flowers:['화분 식물','허브','작은 관엽식물'],message:'우리의 하루에도 오래 자랄 초록 하나를 심어봐요.'},
 {id:'parents-day',title:'어버이날',type:'official',month:5,day:8,recipient:'부모님·조부모님',meaning:'부모님의 사랑과 헌신에 감사하는 법정 기념일',flowers:['카네이션','리시안셔스','장미'],message:'늘 든든하게 곁을 지켜주셔서 감사합니다. 오래오래 건강하세요.'},

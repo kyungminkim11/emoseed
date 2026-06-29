@@ -181,17 +181,19 @@
     });
   }
 
+  function cleanInput(value) { return String(value || '').replace(/[<>]/g, '').trim(); }
+
   function savePersonal(event) {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
     const item = {
       id: `${Date.now()}`,
-      title:String(data.get('title') || '').trim(),
+      title:cleanInput(data.get('title')),
       date:String(data.get('date') || ''),
-      recipient:String(data.get('recipient') || '').trim(),
-      note:String(data.get('note') || '').trim(),
-      message:String(data.get('message') || '').trim(),
+      recipient:cleanInput(data.get('recipient')),
+      note:cleanInput(data.get('note')),
+      message:cleanInput(data.get('message')),
       repeat:data.get('repeat') === 'on'
     };
     if (!item.title || !item.date) return;
