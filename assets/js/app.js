@@ -109,7 +109,7 @@
     const safeTheme = themes.some(([key]) => key === theme) ? theme : 'mint';
     document.documentElement.dataset.theme = safeTheme;
     try { localStorage.setItem('emoseed-theme', safeTheme); } catch (_) {}
-    document.querySelectorAll('[data-theme]').forEach((button) => {
+    document.querySelectorAll('.theme-chip[data-theme]').forEach((button) => {
       button.setAttribute('aria-pressed', button.dataset.theme === safeTheme ? 'true' : 'false');
     });
     if (announce) {
@@ -373,7 +373,7 @@
     document.querySelectorAll('[data-current-year]').forEach((el) => { el.textContent = new Date().getFullYear(); });
     document.getElementById('menuOpen')?.addEventListener('click', openDrawer);
     document.querySelectorAll('[data-close-drawer]').forEach((el) => el.addEventListener('click', closeDrawer));
-    document.querySelectorAll('[data-theme]').forEach((button) => button.addEventListener('click', () => applyTheme(button.dataset.theme, true)));
+    document.querySelectorAll('.theme-chip[data-theme]').forEach((button) => button.addEventListener('click', () => applyTheme(button.dataset.theme, true)));
     document.querySelectorAll('[data-theme-quick]').forEach((button) => button.addEventListener('click', cycleTheme));
     document.querySelectorAll('[data-copy-link]').forEach((button) => button.addEventListener('click', () => copyText(button.dataset.copyLink || location.href)));
     document.querySelectorAll('[data-share]').forEach((button) => button.addEventListener('click', () => share({ title: button.dataset.shareTitle || document.title, text: button.dataset.shareText || '', url: button.dataset.shareUrl || location.href })));
