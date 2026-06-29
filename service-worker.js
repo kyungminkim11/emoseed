@@ -1,4 +1,4 @@
-const CACHE = 'emoseed-flowers-20260628-origin-v2';
+const CACHE = 'emoseed-theme-click-fix-20260630';
 const CORE = [
   '/', '/index.html', '/offline.html', '/assets/css/style.css', '/assets/js/app.js', '/assets/js/data.js',
   '/assets/images/favicon.svg',
