@@ -1,4 +1,4 @@
-const CACHE = 'emoseed-mobile-app-shell-20260711';
+const CACHE = 'emoseed-mobile-app-shell-20260711-v2';
 const CORE = [
   '/', '/index.html', '/offline.html', '/assets/css/style.css', '/assets/css/mobile-app.css',
   '/assets/js/app.js', '/assets/js/mobile-app.js', '/assets/js/data.js', '/assets/images/favicon.svg',
@@ -29,6 +29,8 @@ async function enhanceHtml(response) {
 
   const headers = new Headers(response.headers);
   headers.delete('content-length');
+  headers.delete('content-encoding');
+  headers.set('content-type', 'text/html; charset=utf-8');
   return new Response(html, {
     status: response.status,
     statusText: response.statusText,
@@ -61,7 +63,7 @@ self.addEventListener('fetch', (event) => {
         const network = await fetch(event.request);
         const enhanced = await enhanceHtml(network);
         const cache = await caches.open(CACHE);
-        cache.put(event.request, enhanced.clone());
+        await cache.put(event.request, enhanced.clone());
         return enhanced;
       } catch (_) {
         const cached = await caches.match(event.request) || await caches.match('/offline.html');
