@@ -1,19 +1,56 @@
 {
+  "id": "/",
   "name": "EmoSeed — 작은 디지털 정원",
   "short_name": "EmoSeed",
   "description": "식물 성향 테스트, 꽃 도감, 꽃말 검색, 꽃 선물 캘린더와 상황별 꽃다발 추천을 제공하는 작은 디지털 정원",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "portrait-primary",
   "background_color": "#f6fbf6",
   "theme_color": "#2f6f50",
   "lang": "ko-KR",
+  "dir": "ltr",
+  "categories": [
+    "lifestyle",
+    "education",
+    "entertainment"
+  ],
+  "prefer_related_applications": false,
   "icons": [
-    { "src": "/assets/images/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+    {
+      "src": "/assets/images/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
   ],
   "shortcuts": [
-    { "name": "꽃 선물 캘린더", "url": "/flowers/gifts.html", "description": "다가오는 기념일과 꽃다발 추천" },
-    { "name": "꽃 도감", "url": "/flowers/", "description": "꽃 이름과 꽃말 검색" },
-    { "name": "오늘의 식물 운세", "url": "/fortune/result.html", "description": "오늘의 식물 메시지 보기" }
+    {
+      "name": "나와 닮은 식물",
+      "short_name": "식물 테스트",
+      "url": "/mbti/",
+      "description": "8개의 질문으로 나와 닮은 식물 찾기"
+    },
+    {
+      "name": "꽃 선물 캘린더",
+      "url": "/flowers/gifts.html",
+      "description": "다가오는 기념일과 꽃다발 추천"
+    },
+    {
+      "name": "꽃 도감",
+      "url": "/flowers/",
+      "description": "꽃 이름과 꽃말 검색"
+    },
+    {
+      "name": "오늘의 식물 운세",
+      "url": "/fortune/result.html",
+      "description": "오늘의 식물 메시지 보기"
+    }
   ]
 }
