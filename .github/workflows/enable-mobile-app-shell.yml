@@ -1,0 +1,114 @@
+name: Enable mobile app shell
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/enable-mobile-app-shell.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  upgrade:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Connect the mobile app shell across EmoSeed
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+
+          app = Path('assets/js/app.js')
+          source = app.read_text(encoding='utf-8')
+
+          marker = "  const current = body?.dataset.page || '';\n"
+          loader = """
+
+  function loadMobileAppShell() {
+    if (!document.querySelector('link[data-emoseed-mobile-app]')) {
+      const stylesheet = document.createElement('link');
+      stylesheet.rel = 'stylesheet';
+      stylesheet.href = `${base}assets/css/mobile-app.css`;
+      stylesheet.dataset.emoseedMobileApp = 'true';
+      document.head.appendChild(stylesheet);
+    }
+    if (!document.querySelector('script[data-emoseed-mobile-app]')) {
+      const script = document.createElement('script');
+      script.src = `${base}assets/js/mobile-app.js`;
+      script.defer = true;
+      script.dataset.emoseedMobileApp = 'true';
+      document.head.appendChild(script);
+    }
+  }
+"""
+          if 'function loadMobileAppShell()' not in source:
+              if marker not in source:
+                  raise SystemExit('app.js insertion marker not found')
+              source = source.replace(marker, marker + loader, 1)
+
+          init_marker = "    renderFooter();\n"
+          if '    loadMobileAppShell();\n' not in source:
+              if init_marker not in source:
+                  raise SystemExit('app.js initialize marker not found')
+              source = source.replace(init_marker, init_marker + '    loadMobileAppShell();\n', 1)
+          app.write_text(source, encoding='utf-8')
+
+          index = Path('index.html')
+          html = index.read_text(encoding='utf-8')
+          mobile_meta = """  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="EmoSeed">
+  <meta name="format-detection" content="telephone=no">
+"""
+          if 'mobile-web-app-capable' not in html:
+              html = html.replace('  <meta name="color-scheme" content="light">\n', '  <meta name="color-scheme" content="light">\n' + mobile_meta, 1)
+          index.write_text(html, encoding='utf-8')
+
+          manifest_path = Path('manifest.webmanifest')
+          manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+          manifest['id'] = '/'
+          manifest['display_override'] = ['window-controls-overlay', 'standalone', 'minimal-ui']
+          manifest['orientation'] = 'portrait-primary'
+          manifest['dir'] = 'ltr'
+          manifest['categories'] = ['lifestyle', 'education', 'entertainment']
+          manifest['prefer_related_applications'] = False
+          shortcuts = manifest.get('shortcuts', [])
+          if not any(item.get('url') == '/mbti/' for item in shortcuts):
+              shortcuts.insert(0, {
+                  'name': '나와 닮은 식물',
+                  'short_name': '식물 테스트',
+                  'url': '/mbti/',
+                  'description': '8개의 질문으로 나와 닮은 식물 찾기'
+              })
+          manifest['shortcuts'] = shortcuts
+          manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          sw = Path('service-worker.js')
+          worker = sw.read_text(encoding='utf-8')
+          import re
+          worker = re.sub(r"const CACHE = '[^']+';", "const CACHE = 'emoseed-mobile-app-shell-20260711';", worker, count=1)
+          old = "'/', '/index.html', '/offline.html', '/assets/css/style.css', '/assets/js/app.js', '/assets/js/data.js',"
+          new = "'/', '/index.html', '/offline.html', '/assets/css/style.css', '/assets/css/mobile-app.css', '/assets/js/app.js', '/assets/js/mobile-app.js', '/assets/js/data.js',"
+          if old in worker:
+              worker = worker.replace(old, new, 1)
+          elif '/assets/css/mobile-app.css' not in worker:
+              raise SystemExit('service worker core marker not found')
+          sw.write_text(worker, encoding='utf-8')
+          PY
+
+          node --check assets/js/app.js
+          node --check assets/js/mobile-app.js
+          python -m json.tool manifest.webmanifest >/dev/null
+
+      - name: Commit the completed upgrade
+        run: |
+          rm -f .github/workflows/enable-mobile-app-shell.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Enable native-like mobile app experience' || exit 0
+          git push
