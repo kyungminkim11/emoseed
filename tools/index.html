@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>무료 감정·꽃 도구 10가지 | EmoSeed</title>
+  <meta name="description" content="오늘의 감정 체크인, 꽃 선물 추천, 꽃집 주문 문구, 카드 메시지, 꽃말 역검색, 색상 추천, 반려동물 안전 꽃, 꽃 관리, 탄생화, 꽃다발 조합을 모두 무료로 이용하세요.">
+  <meta name="theme-color" content="#f6fbf6">
+  <meta name="color-scheme" content="light">
+  <link rel="canonical" href="https://emoseed.lavalabs.co.kr/tools/">
+  <link rel="icon" href="../assets/images/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../assets/images/favicon.svg">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/mobile-app.css" data-emoseed-mobile-app>
+  <link rel="stylesheet" href="tools.css">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="EmoSeed">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:title" content="무료 감정·꽃 도구 10가지 | EmoSeed">
+  <meta property="og:description" content="감정 기록부터 꽃 선물과 관리까지, 회원가입 없이 무료로 사용하세요.">
+  <meta property="og:url" content="https://emoseed.lavalabs.co.kr/tools/">
+  <meta property="og:image" content="https://emoseed.lavalabs.co.kr/assets/images/og-image.svg">
+  <script defer src="../assets/js/data.js"></script>
+  <script defer src="../assets/js/app.js"></script>
+  <script defer src="../assets/js/mobile-app.js" data-emoseed-mobile-app></script>
+  <script defer src="../assets/js/free-tools-shell.js"></script>
+  <script defer src="tools-data.js"></script>
+  <script defer src="tools.js"></script>
+</head>
+<body data-base="../" data-page="tools">
+  <div id="site-header"></div>
+
+  <main id="main-content" class="page-shell tools-page">
+    <section class="tools-hero">
+      <div class="tools-hero-copy">
+        <span class="eyebrow">무료 · 회원가입 없음 · 브라우저 저장</span>
+        <h1>마음과 꽃이 필요할 때<br><span>바로 꺼내 쓰는 도구</span></h1>
+        <p>감정을 기록하고, 꽃을 고르고, 문구를 만들고, 받은 꽃을 오래 돌보는 과정까지 한곳에 모았습니다.</p>
+        <div class="tools-hero-actions">
+          <a class="primary-button" href="#mood">오늘의 감정 체크</a>
+          <a class="secondary-button" href="#gift">꽃 선물 추천받기</a>
+        </div>
+      </div>
+      <div class="tools-hero-board" aria-hidden="true">
+        <div class="hero-board-flower">🌼</div>
+        <div class="hero-board-note note-one">오늘의 마음</div>
+        <div class="hero-board-note note-two">꽃말로 찾기</div>
+        <div class="hero-board-note note-three">오래 피우기</div>
+      </div>
+    </section>
+
+    <section class="tool-directory" aria-labelledby="toolDirectoryTitle">
+      <div class="tool-directory-head">
+        <div>
+          <span class="section-label">FREE TOOLS</span>
+          <h2 id="toolDirectoryTitle">필요한 기능부터 시작하세요</h2>
+        </div>
+        <p>모든 결과는 기기 안에서 처리됩니다. 기록 저장 기능은 브라우저의 로컬 저장소를 사용합니다.</p>
+      </div>
+
+      <div class="tool-card-grid">
+        <a class="tool-card" href="#mood" data-open-tool="mood"><span>01</span><b>오늘의 감정 체크인</b><small>현재 마음과 작은 행동 추천</small><i>😊</i></a>
+        <a class="tool-card" href="#gift" data-open-tool="gift"><span>02</span><b>상황별 꽃 선물 추천</b><small>대상·예산·색상 맞춤 구성</small><i>💐</i></a>
+        <a class="tool-card" href="#order" data-open-tool="order"><span>03</span><b>꽃집 주문 문구</b><small>복사해서 바로 보낼 요청서</small><i>📝</i></a>
+        <a class="tool-card" href="#message" data-open-tool="message"><span>04</span><b>카드 메시지</b><small>관계와 말투에 맞는 문장</small><i>💌</i></a>
+        <a class="tool-card" href="#meaning" data-open-tool="meaning"><span>05</span><b>꽃말 역검색</b><small>전하고 싶은 의미로 꽃 찾기</small><i>🔎</i></a>
+        <a class="tool-card" href="#color" data-open-tool="color"><span>06</span><b>색상별 꽃 추천</b><small>분위기와 조합까지 확인</small><i>🎨</i></a>
+        <a class="tool-card" href="#pet" data-open-tool="pet"><span>07</span><b>반려동물 안전 꽃</b><small>고양이·강아지 주의 정보</small><i>🐾</i></a>
+        <a class="tool-card" href="#care" data-open-tool="care"><span>08</span><b>꽃 관리 도우미</b><small>물 갈기와 관리 체크</small><i>🚿</i></a>
+        <a class="tool-card" href="#birth" data-open-tool="birth"><span>09</span><b>탄생화·기념일 꽃</b><small>생일에 맞는 꽃과 문구</small><i>🎂</i></a>
+        <a class="tool-card" href="#bouquet" data-open-tool="bouquet"><span>10</span><b>꽃다발 조합</b><small>꽃·포장·예산 미리보기</small><i>🪄</i></a>
+      </div>
+    </section>
+
+    <section class="tool-workspace" id="toolWorkspace" aria-live="polite">
+      <nav class="tool-switcher" aria-label="무료 도구 빠른 전환">
+        <button type="button" data-tool-switch="mood">감정</button>
+        <button type="button" data-tool-switch="gift">선물</button>
+        <button type="button" data-tool-switch="order">주문</button>
+        <button type="button" data-tool-switch="message">메시지</button>
+        <button type="button" data-tool-switch="meaning">꽃말</button>
+        <button type="button" data-tool-switch="color">색상</button>
+        <button type="button" data-tool-switch="pet">안전</button>
+        <button type="button" data-tool-switch="care">관리</button>
+        <button type="button" data-tool-switch="birth">탄생화</button>
+        <button type="button" data-tool-switch="bouquet">조합</button>
+      </nav>
+
+      <section class="tool-panel" id="mood" data-tool-panel="mood">
+        <div class="tool-panel-heading">
+          <div><span class="tool-number">01</span><h2>오늘의 감정 체크인</h2></div>
+          <p>지금 가장 가까운 감정을 하나 고르세요. 결과와 최근 7일 기록은 이 브라우저에만 저장됩니다.</p>
+        </div>
+        <div class="mood-choice-grid" id="moodChoices"></div>
+        <div class="tool-result empty-result" id="moodResult">
+          <p>감정을 선택하면 오늘의 식물과 작은 행동이 나타납니다.</p>
+        </div>
+        <div class="history-block">
+          <div class="subsection-head"><h3>최근 7일 감정 기록</h3><button class="text-button" type="button" id="clearMoodHistory">기록 지우기</button></div>
+          <div class="mood-history" id="moodHistory"></div>
+        </div>
+      </section>
+
+      <section class="tool-panel" id="gift" data-tool-panel="gift" hidden>
+        <div class="tool-panel-heading">
+          <div><span class="tool-number">02</span><h2>상황별 꽃 선물 추천</h2></div>
+          <p>선물 대상과 상황, 예산, 분위기를 조합해 실제 꽃집에 전달할 수 있는 구성을 만듭니다.</p>
+        </div>
+        <form class="tool-form" id="giftForm">
+          <label>누구에게 선물하나요?
+            <select name="relationship">
+              <option value="lover">연인</option><option value="friend">친구</option><option value="parents">부모님</option>
+              <option value="teacher">선생님</option><option value="coworker">직장 동료</option><option value="family">가족</option><option value="self">나 자신</option>
+            </select>
+          </label>
+          <label>어떤 상황인가요?
+            <select name="occasion">
+              <option value="birthday">생일</option><option value="anniversary">기념일</option><option value="confession">고백</option>
+              <option value="apology">사과</option><option value="thanks">감사</option><option value="graduation">졸업·입학</option>
+              <option value="newstart">취업·이직·새출발</option><option value="cheer">응원·위로</option><option value="parents">부모님 선물</option>
+              <option value="wedding">결혼</option><option value="opening">개업·승진</option>
+            </select>
+          </label>
+          <label>예산
+            <select name="budget"><option value="30000">3만원대</option><option value="50000" selected>5만원대</option><option value="70000">7만원대</option><option value="100000">10만원 이상</option></select>
+          </label>
+          <label>원하는 분위기
+            <select name="style"><option value="warm">따뜻하고 다정하게</option><option value="bright">밝고 생기 있게</option><option value="elegant">차분하고 우아하게</option><option value="natural">자연스럽고 편안하게</option><option value="romantic">로맨틱하고 풍성하게</option><option value="minimal">담백하고 미니멀하게</option></select>
+          </label>
+          <label>선호 색상
+            <select name="color"><option value="any">추천에 맡기기</option><option value="pink">분홍</option><option value="red">빨강</option><option value="yellow">노랑</option><option value="orange">주황</option><option value="white">흰색</option><option value="purple">보라</option><option value="blue">파랑</option><option value="green">초록</option></select>
+          </label>
+          <label>계절
+            <select name="season"><option value="any">계절 상관없음</option><option value="spring">봄</option><option value="summer">여름</option><option value="autumn">가을</option><option value="winter">겨울</option></select>
+          </label>
+          <label>반려동물
+            <select name="pet"><option value="none">없음·모름</option><option value="cat">고양이</option><option value="dog">강아지</option></select>
+          </label>
+          <label>전달 방식
+            <select name="delivery"><option value="pickup">직접 픽업</option><option value="delivery">꽃집 배송</option><option value="meet">직접 전달</option></select>
+          </label>
+          <button class="primary-button form-submit" type="submit">무료 추천 결과 만들기</button>
+        </form>
+        <div class="tool-result empty-result" id="giftResult"><p>조건을 선택하고 추천 결과를 만들어보세요.</p></div>
+      </section>
+
+      <section class="tool-panel" id="order" data-tool-panel="order" hidden>
+        <div class="tool-panel-heading">
+          <div><span class="tool-number">03</span><h2>꽃집 주문 문구 생성기</h2></div>
+          <p>꽃집에 DM이나 문자로 보낼 요청 내용을 빠짐없이 정리합니다.</p>
+        </div>
+        <form class="tool-form" id="orderForm">
+          <label>선물 대상<input name="target" type="text" value="여자친구" maxlength="30"></label>
+          <label>기념일·상황<input name="occasion" type="text" value="생일" maxlength="40"></label>
+          <label>예산<select name="budget"><option>3만원</option><option selected>5만원</option><option>7만원</option><option>10만원 이상</option></select></label>
+          <label>주요 색상<select name="color"><option>분홍·흰색</option><option>노랑·오렌지</option><option>보라·흰색</option><option>빨강·분홍</option><option>초록·흰색</option><option>꽃집 추천</option></select></label>
+          <label>느낌<select name="style"><option>부드럽고 풍성한 느낌</option><option>밝고 생기 있는 느낌</option><option>차분하고 고급스러운 느낌</option><option>자연스럽고 편안한 느낌</option><option>작고 귀여운 느낌</option></select></label>
+          <label>피하고 싶은 요소<input name="avoid" type="text" placeholder="예: 향이 강한 꽃, 백합, 진한 빨강"></label>
+          <label>수령 방식<select name="delivery"><option>매장 픽업</option><option>배송</option><option>상담 후 결정</option></select></label>
+          <label>희망 날짜<input name="date" type="date"></label>
+          <label class="full-field">추가 요청<textarea name="extra" rows="3" placeholder="예: 사진 촬영용이라 정면에서 예쁘게 보이면 좋겠습니다."></textarea></label>
+          <button class="primary-button form-submit" type="submit">주문 문구 만들기</button>
+        </form>
+        <div class="tool-result empty-result" id="orderResult"><p>내용을 입력하면 복사 가능한 주문 문구를 만들어드립니다.</p></div>
+      </section>
+
+      <section class="tool-panel" id="message" data-tool-panel="message" hidden>
+        <div class="tool-panel-heading">
+          <div><span class="tool-number">04</span><h2>꽃 카드 메시지 생성기</h2></div>
+          <p>관계, 상황, 말투를 선택하면 카드에 들어갈 자연스러운 문장을 만듭니다.</p>
+        </div>
+        <form class="tool-form compact-form" id="messageForm">
+          <label>받는 사람<select name="relationship"><option value="lover">연인</option><option value="friend">친구</option><option value="parents">부모님</option><option value="teacher">선생님</option><option value="coworker">직장 동료</option><option value="family">가족</option></select></label>
+          <label>상황<select name="occasion"><option value="birthday">생일</option><option value="anniversary">기념일</option><option value="confession">고백</option><option value="apology">사과</option><option value="thanks">감사</option><option value="graduation">졸업·입학</option><option value="newstart">새출발</option><option value="cheer">응원·위로</option></select></label>
+          <label>말투<select name="tone"><option value="simple">짧고 담백하게</option><option value="warm">다정하게</option><option value="serious">진지하게</option><option value="cute">귀엽게</option><option value="formal">격식 있게</option><option value="natural">자연스럽게</option></select></label>
+          <label>이름 또는 호칭<input name="name" type="text" placeholder="예: 서영아, 엄마, 민지님"></label>
+          <button class="primary-button form-submit" type="submit">메시지 3개 만들기</button>
+        </form>
+        <div class="tool-result empty-result" id="messageResult"><p>조건을 선택하면 서로 다른 카드 문구 3개를 제안합니다.</p></div>
+      </section>
+
+      <section class="tool-panel" id="meaning" data-tool-panel="meaning" hidden>
+        <div class="tool-panel-heading">
+          <div><span class="tool-number">05</span><h2>꽃말 역검색</h2></div>
+          <p>꽃 이름을 몰라도 괜찮습니다. 전하고 싶은 의미부터 고르세요.</p>
+        </div>
+        <div class="meaning-search">
+          <label class="search-field">의미 검색<input id="meaningInput" type="search" placeholder="예: 감사, 응원, 사랑, 새출발"></label>
+          <div class="meaning-chips" id="meaningChips"></div>
+        </div>
+        <div class="flower-result-grid" id="meaningResult"></div>
+      </section>
+
+      <section class="tool-panel" id="color" data-tool-panel="color" hidden>
+        <div class="tool-panel-heading">
+          <div><span class="tool-number">06</span><h2>색상별 꽃 추천</h2></div>
+          <p>색이 주는 분위기와 잘 어울리는 꽃, 함께 조합하면 좋은 색을 확인하세요.</p>
+        </div>
+        <div class="color-picker" id="colorPicker"></div>
+        <div class="tool-result empty-result" id="colorResult"><p>원하는 꽃다발 색상을 선택하세요.</p></div>
+      </section>
+
+      <section class="tool-panel" id="pet" data-tool-panel="pet" hidden>
+        <div class="tool-panel-heading">
+          <div><span class="tool-number">07</span><h2>반려동물 안전 꽃 확인</h2></div>
+          <p>대표적인 절화의 안전 정보를 간단히 확인합니다. 의심되는 섭취나 노출이 있다면 결과와 관계없이 즉시 동물병원에 문의하세요.</p>
+        </div>
+        <form class="tool-form compact-form" id="petForm">
+          <label>반려동물<select name="pet"><option value="cat">고양이</option><option value="dog">강아지</option></select></label>
+          <label>꽃 선택<select name="flower" id="petFlowerSelect"></select></label>
+          <button class="primary-button form-submit" type="submit">안전 정보 확인</button>
+        </form>
+        <div class="tool-result empty-result" id="petResult"><p>반려동물과 꽃을 선택하세요.</p></div>
+        <div class="safety-notice">
+          <strong>중요 안내</strong>
+          <p>같은 통칭을 사용하는 꽃이라도 식물학적 종이 다를 수 있습니다. 꽃집에 정확한 품종을 확인하고, 반려동물이 꽃·잎·꽃가루·꽃병 물에 접근하지 않도록 관리하세요.</p>
+        </div>
+      </section>
+
+      <section class="tool-panel" id="care" data-tool-panel="care" hidden>
+        <div class="tool-panel-heading">
+          <div><span class="tool-number">08</span><h2>꽃 관리 도우미</h2></div>
+          <p>받은 꽃을 선택하면 기본 관리법을 보여주고 물 교체 기록을 기기에 저장합니다.</p>
+        </div>
+        <form class="tool-form compact-form" id="careForm">
+          <label>꽃 선택<select name="flower" id="careFlowerSelect"></select></label>
+          <label>받은 날짜<input name="received" type="date" id="careReceived"></label>
+          <button class="primary-button form-submit" type="submit">관리 일정 보기</button>
+        </form>
+        <div class="tool-result empty-result" id="careResult"><p>꽃과 받은 날짜를 선택하세요.</p></div>
+      </section>
+
+      <section class="tool-panel" id="birth" data-tool-panel="birth" hidden>
+        <div class="tool-panel-heading">
+          <div><span class="tool-number">09</span><h2>탄생화·기념일 꽃</h2></div>
+          <p>생일을 기준으로 월별 탄생화와 어울리는 꽃다발, 카드 문구를 추천합니다.</p>
+        </div>
+        <form class="tool-form compact-form" id="birthForm">
+          <label>생일<input name="birthday" type="date" required></label>
+          <label>누구의 생일인가요?<select name="relationship"><option value="self">나 자신</option><option value="lover">연인</option><option value="friend">친구</option><option value="parents">부모님</option><option value="family">가족</option></select></label>
+          <button class="primary-button form-submit" type="submit">탄생화 확인</button>
+        </form>
+        <div class="tool-result empty-result" id="birthResult"><p>생일을 입력하면 탄생화와 의미를 보여드립니다.</p></div>
+      </section>
+
+      <section class="tool-panel" id="bouquet" data-tool-panel="bouquet" hidden>
+        <div class="tool-panel-heading">
+          <div><span class="tool-number">10</span><h2>꽃다발 조합 시뮬레이터</h2></div>
+          <p>메인 꽃과 서브 꽃, 포장 색상을 조합해 간단한 미리보기와 주문 구성표를 만듭니다.</p>
+        </div>
+        <div class="bouquet-layout">
+          <form class="tool-form compact-form" id="bouquetForm">
+            <label>메인 꽃<select name="main" id="bouquetMain"></select></label>
+            <label>서브 꽃<select name="sub" id="bouquetSub"></select></label>
+            <label>포장 색상<select name="wrap"><option value="cream">크림</option><option value="pink">연분홍</option><option value="green">세이지 그린</option><option value="gray">웜그레이</option><option value="navy">네이비</option><option value="kraft">크라프트</option></select></label>
+            <label>크기<select name="size"><option value="small">미니 꽃다발</option><option value="medium" selected>기본 꽃다발</option><option value="large">풍성한 꽃다발</option></select></label>
+            <label>느낌<select name="style"><option value="natural">자연스럽게</option><option value="round">둥글고 단정하게</option><option value="airy">여백감 있게</option><option value="romantic">로맨틱하게</option></select></label>
+            <button class="primary-button form-submit" type="submit">조합 미리보기</button>
+          </form>
+          <div class="bouquet-preview" id="bouquetPreview" aria-label="꽃다발 미리보기">
+            <div class="bouquet-paper"></div>
+            <div class="bouquet-flowers" id="bouquetFlowers">🌹 🌹<br>☁️ 🌹 ☁️</div>
+            <div class="bouquet-ribbon">EmoSeed</div>
+          </div>
+        </div>
+        <div class="tool-result empty-result" id="bouquetResult"><p>꽃과 포장을 선택해 나만의 꽃다발을 조합하세요.</p></div>
+      </section>
+    </section>
+
+    <section class="tools-closing">
+      <div>
+        <h2>무료 기능은 계속 자랍니다</h2>
+        <p>유용한 기능은 로그인 없이 제공하고, 사용 기록도 가능한 한 기기 안에 남기는 방향으로 운영합니다.</p>
+      </div>
+      <a class="secondary-button" href="../flowers/index.html">꽃 도감에서 더 알아보기</a>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
