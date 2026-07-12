@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>EmoSeed — 매일 마음을 돌보는 작은 디지털 정원</title>
-  <meta name="description" content="나와 닮은 식물 테스트, 오늘의 식물 운세, 50종 꽃 도감과 꽃말·원산지 검색, 상황별 꽃 추천을 만나보세요.">
+  <meta name="description" content="감정 체크인, 식물 성향 테스트, 꽃 도감, 꽃 선물 추천, 카드 문구와 꽃 관리 등 무료 감정·꽃 도구를 만나보세요.">
   <meta name="theme-color" content="#f6fbf6">
   <meta name="color-scheme" content="light">
   <meta name="mobile-web-app-capable" content="yes">
@@ -20,51 +20,31 @@
   <link rel="stylesheet" href="assets/css/mobile-app.css" data-emoseed-mobile-app>
   <style>
     @media (min-width: 721px) {
-      body[data-page="home"] .hero-visual {
-        isolation: isolate;
-        overflow: visible;
-      }
-
-      body[data-page="home"] .visual-orbit {
-        z-index: 0;
-      }
-
-      body[data-page="home"] .visual-card {
-        z-index: 1;
-      }
-
-      body[data-page="home"] .float-badge {
-        z-index: 3;
-        max-width: none;
-        white-space: nowrap;
-        pointer-events: none;
-      }
-
-      body[data-page="home"] .float-badge.one {
-        left: 10px;
-      }
-
-      body[data-page="home"] .float-badge.two {
-        right: 0;
-      }
+      body[data-page="home"] .hero-visual { isolation: isolate; overflow: visible; }
+      body[data-page="home"] .visual-orbit { z-index: 0; }
+      body[data-page="home"] .visual-card { z-index: 1; }
+      body[data-page="home"] .float-badge { z-index: 3; max-width: none; white-space: nowrap; pointer-events: none; }
+      body[data-page="home"] .float-badge.one { left: 10px; }
+      body[data-page="home"] .float-badge.two { right: 0; }
     }
   </style>
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="EmoSeed">
   <meta property="og:locale" content="ko_KR">
   <meta property="og:title" content="EmoSeed — 매일 마음을 돌보는 작은 디지털 정원">
-  <meta property="og:description" content="나와 닮은 식물 테스트, 오늘의 식물 운세, 50종 꽃 도감과 꽃말·원산지 검색을 만나보세요.">
+  <meta property="og:description" content="감정 기록부터 꽃 선물과 관리까지, 회원가입 없이 무료로 이용하세요.">
   <meta property="og:url" content="https://emoseed.lavalabs.co.kr/">
   <meta property="og:image" content="https://emoseed.lavalabs.co.kr/assets/images/og-image.svg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="EmoSeed — 매일 마음을 돌보는 작은 디지털 정원">
-  <meta name="twitter:description" content="나와 닮은 식물 테스트, 오늘의 식물 운세, 50종 꽃 도감과 꽃말·원산지 검색을 만나보세요.">
+  <meta name="twitter:description" content="감정 기록부터 꽃 선물과 관리까지, 회원가입 없이 무료로 이용하세요.">
   <meta name="twitter:image" content="https://emoseed.lavalabs.co.kr/assets/images/og-image.svg">
   <script defer src="assets/js/data.js"></script>
   <script defer src="assets/js/app.js"></script>
   <script defer src="assets/js/mobile-app.js" data-emoseed-mobile-app></script>
+  <script defer src="assets/js/free-tools-shell.js"></script>
 </head>
 <body data-base="" data-page="home">
   <div id="site-header"></div>
@@ -76,7 +56,7 @@
     <p class="hero-lead">바쁜 하루 사이 잠깐 멈춰, 지금의 나를 식물로 만나보세요. 8개의 질문이면 충분합니다.</p>
     <div class="hero-actions">
       <a class="primary-button" href="mbti/index.html">🌱 1분 만에 테스트 시작</a>
-      <a class="secondary-button" href="flowers/index.html">🌸 꽃 도감 보기</a>
+      <a class="secondary-button" href="tools/index.html">🧰 무료 도구 10가지</a>
     </div>
     <div class="hero-meta" aria-label="서비스 특징">
       <span>✓ 회원가입 없음</span><span>✓ 휴대폰에서 바로</span><span>✓ 결과 이미지 저장</span>
@@ -89,57 +69,35 @@
     <div class="float-badge two">천천히 피어나는 중</div>
   </div>
 </section>
-
 <section class="section" id="programs">
   <div class="section-heading">
     <div><span class="eyebrow">EmoSeed Programs</span><h2>지금 마음에 맞는<br>경험을 골라보세요</h2></div>
     <p>정답을 맞히는 테스트보다, 지금의 나를 가볍게 들여다보는 경험을 만들었습니다.</p>
   </div>
   <div class="feature-grid">
-    <a class="feature-card" href="mbti/index.html">
-      <div><div class="feature-icon">🌱</div><h3>나와 닮은 식물</h3><p>8개의 질문으로 성향을 살펴보고, 나를 닮은 식물과 오늘의 마음 관리 팁을 만나보세요.</p></div>
-      <div class="feature-meta"><span>약 1분 · 16가지 결과</span><span>시작하기 →</span></div>
-    </a>
-    <a class="feature-card" href="fortune/index.html">
-      <div><div class="feature-icon">🔮</div><h3>오늘의 식물 운세</h3><p>하루에 한 번, 오늘의 식물과 작은 행동 제안을 받아보세요. 매일 자정 새롭게 피어납니다.</p></div>
-      <div class="feature-meta"><span>매일 새로운 결과</span><span>운세 보기 →</span></div>
-    </a>
-    <a class="feature-card" href="name-generator/index.html">
-      <div><div class="feature-icon">🌼</div><h3>나만의 식물 이름</h3><p>감정과 분위기, 마음에 담긴 단어를 조합해 오늘의 나를 위한 식물 이름을 만들어드려요.</p></div>
-      <div class="feature-meta"><span>수백 가지 조합</span><span>이름 만들기 →</span></div>
-    </a>
-    <a class="feature-card" href="compatibility/index.html">
-      <div><div class="feature-icon">💘</div><h3>식물 궁합</h3><p>닉네임과 마음에 드는 식물을 골라 둘 사이의 감성 궁합과 잘 맞는 식물을 확인해보세요.</p></div>
-      <div class="feature-meta"><span>16가지 식물</span><span>궁합 보기 →</span></div>
-    </a>
-    <a class="feature-card" href="flowers/index.html#guide">
-      <div><div class="feature-icon">🌸</div><h3>꽃 도감·꽃말 검색</h3><p>50가지 꽃의 이름, 개화 시기, 꽃말과 원산지·자생 지역을 검색하고 계절과 색상별로 둘러보세요.</p></div>
-      <div class="feature-meta"><span>꽃 이름·꽃말·원산지 검색</span><span>도감 보기 →</span></div>
-    </a>
-    <a class="feature-card" href="flowers/gifts.html">
-      <div><div class="feature-icon">💐</div><h3>꽃 선물 캘린더</h3><p>다가오는 기념일을 확인하고 대상·예산·상황에 맞는 꽃다발과 주문 문구를 추천받아보세요.</p></div>
-      <div class="feature-meta"><span>개인 기념일 저장 포함</span><span>선물 준비하기 →</span></div>
-    </a>
+    <a class="feature-card" href="mbti/index.html"><div><div class="feature-icon">🌱</div><h3>나와 닮은 식물</h3><p>8개의 질문으로 성향을 살펴보고, 나를 닮은 식물과 오늘의 마음 관리 팁을 만나보세요.</p></div><div class="feature-meta"><span>약 1분 · 16가지 결과</span><span>시작하기 →</span></div></a>
+    <a class="feature-card" href="fortune/index.html"><div><div class="feature-icon">🔮</div><h3>오늘의 식물 운세</h3><p>하루에 한 번, 오늘의 식물과 작은 행동 제안을 받아보세요. 매일 자정 새롭게 피어납니다.</p></div><div class="feature-meta"><span>매일 새로운 결과</span><span>운세 보기 →</span></div></a>
+    <a class="feature-card" href="name-generator/index.html"><div><div class="feature-icon">🌼</div><h3>나만의 식물 이름</h3><p>감정과 분위기, 마음에 담긴 단어를 조합해 오늘의 나를 위한 식물 이름을 만들어드려요.</p></div><div class="feature-meta"><span>수백 가지 조합</span><span>이름 만들기 →</span></div></a>
+    <a class="feature-card" href="compatibility/index.html"><div><div class="feature-icon">💘</div><h3>식물 궁합</h3><p>닉네임과 마음에 드는 식물을 골라 둘 사이의 감성 궁합과 잘 맞는 식물을 확인해보세요.</p></div><div class="feature-meta"><span>16가지 식물</span><span>궁합 보기 →</span></div></a>
+    <a class="feature-card" href="flowers/index.html#guide"><div><div class="feature-icon">🌸</div><h3>꽃 도감·꽃말 검색</h3><p>50가지 꽃의 이름, 개화 시기, 꽃말과 원산지·자생 지역을 검색하고 계절과 색상별로 둘러보세요.</p></div><div class="feature-meta"><span>꽃 이름·꽃말·원산지 검색</span><span>도감 보기 →</span></div></a>
+    <a class="feature-card" href="flowers/gifts.html"><div><div class="feature-icon">💐</div><h3>꽃 선물 캘린더</h3><p>다가오는 기념일을 확인하고 대상·예산·상황에 맞는 꽃다발과 주문 문구를 추천받아보세요.</p></div><div class="feature-meta"><span>개인 기념일 저장 포함</span><span>선물 준비하기 →</span></div></a>
   </div>
 </section>
-
 <section class="section compact">
   <div class="daily-card">
     <div><p id="todayLabel">오늘의 정원</p><h2 id="dailyTitle">오늘은 어떤 식물이 기다릴까요?</h2><p id="dailyMessage">하루에 하나씩 달라지는 작은 메시지를 확인해보세요.</p></div>
     <a class="primary-button" href="fortune/result.html">오늘의 운세 열기</a>
   </div>
 </section>
-
 <section class="section">
   <div class="section-heading"><div><span class="eyebrow">Why EmoSeed</span><h2>결과보다 중요한 건<br>나를 바라보는 잠깐의 시간</h2></div></div>
   <div class="info-grid">
     <article class="info-card"><h3>🪴 부담 없이</h3><p>로그인이나 긴 설문 없이, 휴대폰에서 가볍게 시작할 수 있어요.</p></article>
     <article class="info-card"><h3>💭 조금 더 다정하게</h3><p>유형을 단정하기보다 강점과 지친 모습, 오늘의 돌봄 방법을 함께 전해요.</p></article>
     <article class="info-card"><h3>📷 오래 간직하게</h3><p>결과를 세로형 이미지로 저장해 스토리와 메시지로 나눌 수 있어요.</p></article>
-    <article class="info-card"><h3>🔒 개인정보는 가볍게</h3><p>테스트는 브라우저에서 처리하며 회원가입이나 서버 전송을 요구하지 않아요.</p></article>
+    <article class="info-card"><h3>🔒 개인정보는 가볍게</h3><p>테스트와 무료 도구는 브라우저에서 처리하며 회원가입이나 서버 전송을 요구하지 않아요.</p></article>
   </div>
 </section>
-
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const plant = window.EmoSeed.dailyPlant();
