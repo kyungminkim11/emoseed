@@ -1,4 +1,4 @@
-const CACHE = 'emoseed-flower-art-20260712-v2';
+const CACHE = 'emoseed-flower-art-20260712-v3';
 const CORE = [
   '/', '/index.html', '/offline.html', '/assets/css/style.css', '/assets/css/mobile-app.css',
   '/assets/js/app.js', '/assets/js/mobile-app.js', '/assets/js/free-tools-shell.js', '/assets/js/data.js', '/assets/images/favicon.svg',
@@ -15,7 +15,8 @@ const CORE = [
 const MOBILE_STYLE = '<link rel="stylesheet" href="/assets/css/mobile-app.css" data-emoseed-mobile-app>';
 const MOBILE_SCRIPT = '<script defer src="/assets/js/mobile-app.js" data-emoseed-mobile-app><\/script>';
 const TOOLS_SCRIPT = '<script defer src="/assets/js/free-tools-shell.js"><\/script>';
-const FLOWER_ART_SCRIPT = '<script defer src="/flowers/flowers-art-fix.js" data-emoseed-flower-art><\/script>';
+const FLOWER_ART_SCRIPT = `<script defer src="/flowers/flowers-art-fix.js" data-emoseed-flower-art><\/script>
+<script data-emoseed-flower-dialog-refresh>document.addEventListener('DOMContentLoaded',function(){var box=document.getElementById('dialogArt');if(!box)return;new MutationObserver(function(){if(box.querySelector('svg:not(.botanical-flower)')){delete box.dataset.artV2;window.EmoSeedFlowerArt&&window.EmoSeedFlowerArt.apply();}}).observe(box,{childList:true,subtree:true});});<\/script>`;
 
 async function enhanceHtml(response) {
   if (!response) return response;
