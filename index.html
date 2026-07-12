@@ -18,6 +18,37 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/mobile-app.css" data-emoseed-mobile-app>
+  <style>
+    @media (min-width: 721px) {
+      body[data-page="home"] .hero-visual {
+        isolation: isolate;
+        overflow: visible;
+      }
+
+      body[data-page="home"] .visual-orbit {
+        z-index: 0;
+      }
+
+      body[data-page="home"] .visual-card {
+        z-index: 1;
+      }
+
+      body[data-page="home"] .float-badge {
+        z-index: 3;
+        max-width: none;
+        white-space: nowrap;
+        pointer-events: none;
+      }
+
+      body[data-page="home"] .float-badge.one {
+        left: 10px;
+      }
+
+      body[data-page="home"] .float-badge.two {
+        right: 0;
+      }
+    }
+  </style>
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="EmoSeed">
   <meta property="og:locale" content="ko_KR">
