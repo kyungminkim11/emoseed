@@ -1,10 +1,10 @@
-const CACHE = 'emoseed-flower-art-20260712-v3';
+const CACHE = 'emoseed-flower-art-20260712-v4';
 const CORE = [
   '/', '/index.html', '/offline.html', '/assets/css/style.css', '/assets/css/mobile-app.css',
   '/assets/js/app.js', '/assets/js/mobile-app.js', '/assets/js/free-tools-shell.js', '/assets/js/data.js', '/assets/images/favicon.svg',
   '/tools/', '/tools/index.html', '/tools/tools.css', '/tools/tools-data.js', '/tools/tools.js',
   '/mbti/index.html', '/fortune/index.html', '/name-generator/index.html', '/compatibility/index.html',
-  '/flowers/index.html', '/flowers/gifts.html', '/flowers/flowers.css', '/flowers/flowers-art-fix.js', '/flowers/gifts.css',
+  '/flowers/index.html', '/flowers/gifts.html', '/flowers/flowers.css', '/flowers/flowers-art-fix.js', '/flowers/flowers-art-cleanup.css', '/flowers/gifts.css',
   '/flowers/gifts-data.js', '/flowers/gifts.js', '/flowers/gifts-plus.css', '/flowers/gifts-plus.js',
   '/flowers/flowers-data-1.js', '/flowers/flowers-data-2.js', '/flowers/flowers-data-3a.js',
   '/flowers/flowers-data-3b1.js', '/flowers/flowers-data-3b3.js', '/flowers/flowers-data-3b5.js',
@@ -15,6 +15,7 @@ const CORE = [
 const MOBILE_STYLE = '<link rel="stylesheet" href="/assets/css/mobile-app.css" data-emoseed-mobile-app>';
 const MOBILE_SCRIPT = '<script defer src="/assets/js/mobile-app.js" data-emoseed-mobile-app><\/script>';
 const TOOLS_SCRIPT = '<script defer src="/assets/js/free-tools-shell.js"><\/script>';
+const FLOWER_ART_STYLE = '<link rel="stylesheet" href="/flowers/flowers-art-cleanup.css" data-emoseed-flower-art-cleanup>';
 const FLOWER_ART_SCRIPT = `<script defer src="/flowers/flowers-art-fix.js" data-emoseed-flower-art><\/script>
 <script data-emoseed-flower-dialog-refresh>document.addEventListener('DOMContentLoaded',function(){var box=document.getElementById('dialogArt');if(!box)return;new MutationObserver(function(){if(box.querySelector('svg:not(.botanical-flower)')){delete box.dataset.artV2;window.EmoSeedFlowerArt&&window.EmoSeedFlowerArt.apply();}}).observe(box,{childList:true,subtree:true});});<\/script>`;
 
@@ -25,6 +26,7 @@ async function enhanceHtml(response) {
 
   let html = await response.text();
   if (!html.includes('assets/css/mobile-app.css')) html = html.replace('</head>', `${MOBILE_STYLE}\n</head>`);
+  if (!html.includes('flowers/flowers-art-cleanup.css')) html = html.replace('</head>', `${FLOWER_ART_STYLE}\n</head>`);
   if (!html.includes('assets/js/mobile-app.js')) html = html.replace('</body>', `${MOBILE_SCRIPT}\n</body>`);
   if (!html.includes('assets/js/free-tools-shell.js')) html = html.replace('</body>', `${TOOLS_SCRIPT}\n</body>`);
   if (!html.includes('flowers/flowers-art-fix.js')) html = html.replace('</body>', `${FLOWER_ART_SCRIPT}\n</body>`);
