@@ -92,7 +92,7 @@
           </nav>
           <details class="business-details">
             <summary>사업자 정보 보기</summary>
-            <p>상호: 라바랩스 · 대표: 김경민 · 사업자등록번호: 455-23-01867 · 문의: info@lavalabs.co.kr</p>
+            <p>상호: 라바랩스 · 대표: 김경민 · 사업자등록번호: 455-23-01867 · 문의: support@lavalabs.co.kr</p>
           </details>
           <div class="footer-copy">© <span data-current-year></span> LAVALABS. All rights reserved.</div>
         </div>
